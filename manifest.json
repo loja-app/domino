@@ -2,7 +2,7 @@
   "name": "Placar Dominó",
   "short_name": "Placar",
   "start_url": "/domino/index.html",
-  "display": "fullscreen",
+  "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "icons": [
@@ -16,5 +16,12 @@
       "sizes": "512x512",
       "type": "image/png"
     }
+  ],
+  "description": "Placar Dominó - Controle os pontos das suas partidas de dominó de forma prática e rápida. Ideal para jogar com amigos, o app funciona offline, é fácil de usar e mantém a tela sempre ativa para você não perder o placar. Personalizado para duplas, com botões intuitivos e função desfazer. Perfeito para suas jogadas!",
+  "dir": "auto",
+  "scope": "/domino/",
+  "orientation": "any",
+  "categories": [
+    "games"
   ]
 }
