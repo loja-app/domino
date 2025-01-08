@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#263238">
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <link rel="manifest" href="/domino/manifest.json">
+  <title>Placar Dominó</title>
+  <style>
+    :root {
+      --cor-de-fundo-dupla1: #E53935;
+      --cor-de-fundo-dupla2: #1976D2;
+      --cor-do-fundo-principal: #263238;
+      --cor-placar: #FFFFFF;
+      --raio-da-borda-botao: 0.625rem;
+      --sombra-dos-elementos: 0 0.375rem 0.75rem rgba(0, 0, 0, 0.2);
+      --cor-botao: #FFFFFF;
+      --cor-botao-icone: #000000;
+      --tamanho-botao: 4rem;
+      --cor-botao-desfazer: rgba(255, 224, 130, 0.9);
+      --cor-press: #D0D0D0;
+      --transicao-duracao: 0.2s;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--cor-do-fundo-principal);
+      font-family: 'Roboto', sans-serif;
+      user-select: none;
+    }
+
+    .container-principal {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 0.525rem;
+      gap: 0.525rem;
+    }
+
+    .cartao-da-dupla {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.25rem;
+      border-radius: var(--raio-da-borda-botao);
+      box-shadow: var(--sombra-dos-elementos);
+      flex: 1;
+      gap: 2rem;
+    }
+
+    .placar {
+      font-size: 7.5rem;
+      font-weight: 900;
+      color: var(--cor-placar);
+      text-align: center;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 3px 7px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container-botoes {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .botao-pontos, .botao-desfazer {
+      flex: 1;
+      padding: 0.875rem;
+      height: var(--tamanho-botao);
+      border: none;
+      border-radius: var(--raio-da-borda-botao);
+      background-color: var(--cor-botao);
+      color: var(--cor-botao-icone);
+      box-shadow: var(--sombra-dos-elementos);
+      font-size: 1.5rem;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color var(--transicao-duracao), transform var(--transicao-duracao);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .botao-desfazer {
+      background-color: var(--cor-botao-desfazer);
+      font-size: 1rem;
+    }
+
+    .botao-pontos:active, .botao-desfazer:active {
+      background-color: var(--cor-press);
+      transform: scale(0.95);
+    }
+
+    .botao-desfazer img {
+      width: 1.5rem;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      pointer-events: none;
+    }
+
+    button:focus {
+      outline: none;
+    }
+
+    @media (orientation: landscape) {
+      .container-principal {
+        flex-direction: row;
+      }
+    }
+
+    .dupla {
+      background-color: var(--cor-de-fundo-dupla1);
+    }
+
+    .dupla-2 {
+      background-color: var(--cor-de-fundo-dupla2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container-principal">
+    <div class="cartao-da-dupla dupla" data-dupla="0">
+      <div class="placar" data-placar="0">0</div>
+      <div class="container-botoes">
+        <button class="botao-pontos" data-pontos="5">5</button>
+        <button class="botao-pontos" data-pontos="10">10</button>
+        <button class="botao-pontos" data-pontos="20">20</button>
+        <button class="botao-desfazer" data-dupla="0">
+          <img src="/domino/undo.svg" alt="Desfazer">
+        </button>
+      </div>
+    </div>
+
+    <div class="cartao-da-dupla dupla-2" data-dupla="1">
+      <div class="placar" data-placar="1">0</div>
+      <div class="container-botoes">
+        <button class="botao-pontos" data-pontos="5">5</button>
+        <button class="botao-pontos" data-pontos="10">10</button>
+        <button class="botao-pontos" data-pontos="20">20</button>
+        <button class="botao-desfazer" data-dupla="1">
+          <img src="/domino/undo.svg" alt="Desfazer">
+        </button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const pontuacao = [0, 0];
+    const historico = [[], []];
+
+    function atualizarPontuacao(index) {
+      document.querySelector(`[data-placar="${index}"]`).textContent = pontuacao[index];
+    }
+
+    function alterarPontos(index, pontos) {
+      if (pontos) {
+        pontuacao[index] += pontos;
+        historico[index].push(pontos);
+      } else if (historico[index].length > 0) {
+        pontuacao[index] -= historico[index].pop();
+      }
+      atualizarPontuacao(index);
+    }
+
+    document.querySelectorAll('.botao-pontos').forEach(botao => {
+      botao.addEventListener('click', () => {
+        const pontos = parseInt(botao.dataset.pontos);
+        const duplaId = botao.closest('.cartao-da-dupla').dataset.dupla;
+        alterarPontos(duplaId, pontos);
+      });
+    });
+
+    document.querySelectorAll('.botao-desfazer').forEach(botao => {
+      botao.addEventListener('click', () => {
+        const duplaId = botao.dataset.dupla;
+        alterarPontos(duplaId);
+      });
+    });
+
+    navigator.wakeLock.request('screen');
+  
+    document.addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+  });
+  
+    navigator.serviceWorker.register('/meu-repo/sw.js', { scope: '/meu-repo/' })
+  .catch(() => {});
+  </script>
+</body>
+  </html>
