@@ -197,6 +197,22 @@
   
     navigator.serviceWorker.register('/domino/service-worker.js', { scope: '/domino/' })
   .catch(() => {});
+
+
+    function atualizarPlacar() {
+  if (navigator.onLine) {
+    // Se estiver online, recarrega normalmente
+    location.reload();
+  } else {
+    // Se estiver offline, apenas recarrega a página a partir do cache
+    caches.match('/domino/index.html').then(response => {
+      if (response) {
+        // Serve a página a partir do cache, sem ir pra rede
+        location.reload();
+      }
+    });
+  }
+          }
   </script>
 </body>
   </html>
