@@ -1,7 +1,7 @@
 {
   "name": "Placar-Dominó",
   "short_name": "Placar",
-  "description": "Placar para jogo de Dominó. Clique para adicionar pontos e use os botões para desfazer. Adicione à tela inicial e utilize o app sem precisar de conexão.",
+  "description": "Placar para jogo de Dominó. Adicione pontos tocando nos botões, use o botão de desfazer para corrigir erros e atualize a página para reiniciar os placares. Adicione o app à tela inicial e use offline sem problemas.",
   "start_url": "/domino/index.html",
   "display": "standalone",
   "background_color": "#263238",
@@ -21,8 +21,9 @@
   "screenshots": [
     {
       "src": "/domino/screenshot.png",
-      "sizes": "720x1460p",
-      "type": "image/png"
+      "sizes": "720x1460",
+      "type": "image/png",
+      "label": "Tela principal mostrando os placares e botões de controle"
     }
   ]
 }
