@@ -1,19 +1,27 @@
 {
-  "name": "Placar Dominó",
+  "name": "Placar-Dominó",
   "short_name": "Placar",
+  "description": "Placar para jogo de Dominó. Clique para adicionar pontos e use os botões para desfazer. Adicione à tela inicial e utilize o app sem precisar de conexão.",
   "start_url": "/domino/index.html",
   "display": "standalone",
   "background_color": "#263238",
   "theme_color": "#263238",
   "icons": [
     {
-      "src": "/domino/icon.png",
+      "src": "icon.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/domino/icon.png",
+      "src": "icon.png",
       "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/domino/screenshot.png",
+      "sizes": "720x1460p",
       "type": "image/png"
     }
   ]
