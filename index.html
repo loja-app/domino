@@ -19,7 +19,7 @@
   --cor-botao: #FFFFFF;
   --cor-botao-icone: #000000;
   --tamanho-botao: 4rem;
-  --cor-botao-desfazer: rgba(255, 224, 130, 0.95);
+  --cor-botao-desfazer: #ffe0b9;
   --cor-press: #D0D0D0;
   --transicao-duracao: 0.2s;
 }
@@ -131,6 +131,14 @@ button:focus {
   background: radial-gradient(circle, var(--cor-de-fundo-dupla2) 0%, var(--cor-de-fundo-gradiente-dupla2) 100%);
 }
   </style>
+  
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(() => console.log('Service Worker registrado!'))
+      .catch(err => console.error('Erro no registro do Service Worker:', err));
+  }
+</script>
 </head>
 <body>
   <div class="container-principal">
@@ -179,16 +187,6 @@ button:focus {
         }
       });
     });
-  </script>
-  
-  <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js').then(() => {
-      console.log('Service Worker registrado com sucesso!');
-    }).catch((error) => {
-      console.error('Erro ao registrar o Service Worker:', error);
-    });
-  }
   </script>
 </body>
 </html>
