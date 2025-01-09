@@ -187,6 +187,23 @@ button:focus {
         }
       });
     });
+
+    let wakeLock = null;
+
+async function requestWakeLock() {
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeLock.addEventListener('release', () => {
+      console.log('Wake Lock foi liberado');
+    });
+  } catch (err) {
+    console.error('Falha ao solicitar o Wake Lock:', err);
+  }
+}
+
+if ('wakeLock' in navigator) {
+  requestWakeLock();
+}
   </script>
 </body>
 </html>
