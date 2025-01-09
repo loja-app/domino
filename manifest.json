@@ -1,7 +1,7 @@
 {
   "name": "Placar Dominó",
   "short_name": "Placar",
-  "start_url": "/domino/index.html",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
