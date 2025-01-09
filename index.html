@@ -4,7 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#263238">
   <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="/domino/manifest.json">
   <title>Placar Dominó</title>
   <style>
     :root {
@@ -134,7 +134,7 @@ button:focus {
   
   <script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
+    navigator.serviceWorker.register('/domino/service-worker.js')
       .then(() => console.log('Service Worker registrado!'))
       .catch(err => console.error('Erro no registro do Service Worker:', err));
   }
