@@ -7,6 +7,7 @@
   <link rel="manifest" href="/domino/manifest.json">
   <title>Placar Dominó</title>
   <style>
+    /* Definindo variáveis de cores e estilos globais */
     :root {
       --cor-de-fundo-dupla1: #E53935;
       --cor-de-fundo-dupla2: #3867d6;
@@ -35,7 +36,7 @@
       height: 100%;
       background: var(--cor-do-fundo-principal);
       font-family: 'Roboto', sans-serif;
-      user-select: none;
+      user-select: none; /* Desativa a seleção de texto */
     }
 
     .container-principal {
@@ -92,7 +93,7 @@
       text-align: center;
       cursor: pointer;
       transition: background-color var(--transicao-duracao), transform var(--transicao-duracao);
-      -webkit-tap-highlight-color: transparent;
+      -webkit-tap-highlight-color: transparent; /* Remove destaque do toque */
     }
 
     .botao-desfazer {
@@ -100,6 +101,7 @@
       font-size: 1rem;
     }
 
+    /* Efeito visual nos botões ao serem pressionados */
     .botao-pontos:active, .botao-desfazer:active {
       background-color: var(--cor-press);
       transform: scale(0.95);
@@ -110,78 +112,75 @@
       height: 2.0rem;
       display: block;
       margin: 0 auto;
-      pointer-events: none;
+      pointer-events: none; /* Desativa interações no ícone */
     }
 
     button:focus {
-      outline: none;
+      outline: none; /* Remove o contorno do botão ao clicar */
     }
 
+    /* Layout em paisagem */
     @media (orientation: landscape) {
       .container-principal {
         flex-direction: row;
       }
     }
 
+    /* Estilos de fundo das duplas */
     .dupla-1 {
-      background: radial-gradient(circle, var(--cor-de-fundo-dupla1) 0%, var(--cor-de-fundo-gradiente-dupla1) 100%);
+      background: radial-gradient(circle, var(--cor-de-fundo-dupla1) 40%, var(--cor-de-fundo-gradiente-dupla1) 99%);
     }
 
     .dupla-2 {
-      background: radial-gradient(circle, var(--cor-de-fundo-dupla2) 0%, var(--cor-de-fundo-gradiente-dupla2) 100%);
+      background: radial-gradient(circle, var(--cor-de-fundo-dupla2) 40%, var(--cor-de-fundo-gradiente-dupla2) 99%);
     }
   </style>
   <script>
-  const registrarServiceWorkerDeFormaSilenciosa = () => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/domino/service-worker.js')
-        .catch(() => {}); // Ignora qualquer erro durante o registro
-    }
-  };
+    // Função para registrar o Service Worker de forma silenciosa, sem exibir erros
+    const registrarServiceWorkerDeFormaSilenciosa = () => {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/domino/service-worker.js')
+          .catch(() => {}); // Ignora qualquer erro durante o registro
+      }
+    };
 
-  registrarServiceWorkerDeFormaSilenciosa();
-</script>
+    registrarServiceWorkerDeFormaSilenciosa();
+  </script>
 </head>
 <body>
-  <div class="container-principal" id="container-duplas"></div>
+  <div class="container-principal"></div>
 
   <script>
+    // Histórico de pontuação de cada dupla
     const historicoDePontuacao = [[], []];
-
+    
+    // Configurações das duplas, incluindo classes de estilo
     const duplasConfiguracoes = [
-      { id: 0, classe: 'dupla-1' },
-      { id: 1, classe: 'dupla-2' }
+      { classe: 'dupla-1' },
+      { classe: 'dupla-2' }
     ];
 
-    const containerDeDuplas = document.getElementById('container-duplas');
+    // Seleciona o container principal onde as duplas serão inseridas
+    const containerDeDuplas = document.querySelector('.container-principal');
 
-    const criarCartaoParaCadaDupla = (duplaConfiguracao) => {
-      const cartaoDupla = document.createElement('div');
-      cartaoDupla.classList.add('cartao-dupla', duplaConfiguracao.classe);
-      cartaoDupla.dataset.dupla = duplaConfiguracao.id;
+    // Função para criar os botões de pontos para cada dupla
+    const criarBotaoPontos = (pontos, placar, id) => {
+      const botaoPontos = document.createElement('button');
+      botaoPontos.classList.add('botao-pontos');
+      botaoPontos.dataset.pontos = pontos;
+      botaoPontos.textContent = pontos;
 
-      const placar = document.createElement('div');
-      placar.classList.add('placar');
-      placar.dataset.placar = duplaConfiguracao.id;
-      placar.textContent = '0';
-
-      const containerBotoes = document.createElement('div');
-      containerBotoes.classList.add('container-botoes');
-
-      [5, 10, 20].forEach(pontos => {
-        const botaoPontos = document.createElement('button');
-        botaoPontos.classList.add('botao-pontos');
-        botaoPontos.dataset.pontos = pontos;
-        botaoPontos.textContent = pontos;
-        
-        botaoPontos.addEventListener('click', () => {
-          placar.textContent = parseInt(placar.textContent) + pontos;
-          historicoDePontuacao[duplaConfiguracao.id].push(pontos);
-        });
-
-        containerBotoes.appendChild(botaoPontos);
+      // Adiciona evento de clique no botão de pontos
+      botaoPontos.addEventListener('click', () => {
+        placar.textContent = parseInt(placar.textContent) + pontos;
+        historicoDePontuacao[id].push(pontos); // Adiciona os pontos ao histórico
       });
 
+      return botaoPontos;
+    };
+
+    // Função para criar o botão de desfazer
+    const criarBotaoDesfazer = (placar, id) => {
       const botaoDesfazer = document.createElement('button');
       botaoDesfazer.classList.add('botao-desfazer');
       botaoDesfazer.innerHTML = `
@@ -190,20 +189,49 @@
         </svg>
       `;
 
+      // Evento de clique para desfazer o último ponto adicionado
       botaoDesfazer.addEventListener('click', () => {
-        if (historicoDePontuacao[duplaConfiguracao.id].length) {
-          placar.textContent = parseInt(placar.textContent) - historicoDePontuacao[duplaConfiguracao.id].pop();
+        if (historicoDePontuacao[id].length) {
+          placar.textContent = parseInt(placar.textContent) - historicoDePontuacao[id].pop();
         }
       });
 
+      return botaoDesfazer;
+    };
+
+    // Função para criar o cartão de cada dupla (com placar e botões)
+    const criarCartaoParaCadaDupla = (duplaConfiguracao, id) => {
+      const cartaoDupla = document.createElement('div');
+      cartaoDupla.classList.add('cartao-dupla', duplaConfiguracao.classe);
+      cartaoDupla.dataset.dupla = id;
+
+      const placar = document.createElement('div');
+      placar.classList.add('placar');
+      placar.dataset.placar = id;
+      placar.textContent = '0'; // Inicializa o placar com 0
+
+      const containerBotoes = document.createElement('div');
+      containerBotoes.classList.add('container-botoes');
+
+      // Criação dos botões de pontos (5, 10, 20)
+      [5, 10, 20].forEach(pontos => {
+        const botaoPontos = criarBotaoPontos(pontos, placar, id);
+        containerBotoes.appendChild(botaoPontos);
+      });
+
+      // Criação do botão de desfazer
+      const botaoDesfazer = criarBotaoDesfazer(placar, id);
       containerBotoes.appendChild(botaoDesfazer);
+
       cartaoDupla.appendChild(placar);
       cartaoDupla.appendChild(containerBotoes);
       containerDeDuplas.appendChild(cartaoDupla);
     };
 
-    duplasConfiguracoes.forEach(dupla => criarCartaoParaCadaDupla(dupla));
- 
+    // Criação dos cartões para cada dupla configurada
+    duplasConfiguracoes.forEach((dupla, index) => criarCartaoParaCadaDupla(dupla, index));
+
+    // Função para manter a tela ativa enquanto o jogo está sendo jogado
     const manterTelaSempreAtivaSemDesligar = async () => {
       let bloqueioDeTelaAtiva = null;
 
@@ -213,20 +241,19 @@
             bloqueioDeTelaAtiva = await navigator.wakeLock.request('screen');
           }
         } catch (erro) {
-          // Ignora qualquer erro
+          // Ignora qualquer erro se não conseguir bloquear a tela
         }
       };
 
       window.addEventListener('load', solicitarBloqueioDeTelaAtiva);
-
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') {
-          solicitarBloqueioDeTelaAtiva();
+          solicitarBloqueioDeTelaAtiva(); // Solicita novamente o bloqueio quando a página fica visível
         }
       });
     };
 
-    manterTelaSempreAtivaSemDesligar();
+    manterTelaSempreAtivaSemDesligar(); // Chama a função para manter a tela ativa
   </script>
 </body>
 </html>
