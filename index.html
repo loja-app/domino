@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <meta name="theme-color" content="#263238">
   <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
   <link rel="manifest" href="/domino/manifest.json">
@@ -20,9 +19,9 @@
       --cor-botao: #FFFFFF;
       --cor-botao-icone: #000000;
       --tamanho-botao: 4rem;
-      --cor-botao-desfazer: #ffe0b9;
+      --cor-botao-desfazer: rgba(255, 224, 130, 0.95);
       --cor-press: #D0D0D0;
-      --transicao-duracao: 0.2s;
+      --transicao-duracao: 0.3s;
     }
 
     * {
@@ -31,8 +30,7 @@
       box-sizing: border-box;
     }
 
-    html,
-    body {
+    html, body {
       width: 100%;
       height: 100%;
       background: var(--cor-do-fundo-principal);
@@ -48,7 +46,7 @@
       gap: 0.525rem;
     }
 
-    .cartao-da-dupla {
+    .cartao-dupla {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -62,7 +60,7 @@
 
     .placar {
       font-size: 8rem;
-      font-weight: 800;
+      font-weight: 850;
       color: var(--cor-placar);
       text-align: center;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 3px 7px rgba(0, 0, 0, 0.15);
@@ -80,8 +78,7 @@
       width: 100%;
     }
 
-    .botao-pontos,
-    .botao-desfazer {
+    .botao-pontos, .botao-desfazer {
       flex: 1;
       padding: 0.875rem;
       height: var(--tamanho-botao);
@@ -91,7 +88,7 @@
       color: var(--cor-botao-icone);
       box-shadow: var(--sombra-dos-elementos);
       font-size: 1.5rem;
-      font-weight: 700;
+      font-weight: 750;
       text-align: center;
       cursor: pointer;
       transition: background-color var(--transicao-duracao), transform var(--transicao-duracao);
@@ -103,15 +100,14 @@
       font-size: 1rem;
     }
 
-    .botao-pontos:active,
-    .botao-desfazer:active {
+    .botao-pontos:active, .botao-desfazer:active {
       background-color: var(--cor-press);
       transform: scale(0.95);
     }
 
     .botao-desfazer svg {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 2.0rem;
+      height: 2.0rem;
       display: block;
       margin: 0 auto;
       pointer-events: none;
@@ -127,7 +123,7 @@
       }
     }
 
-    .dupla {
+    .dupla-1 {
       background: radial-gradient(circle, var(--cor-de-fundo-dupla1) 0%, var(--cor-de-fundo-gradiente-dupla1) 100%);
     }
 
@@ -135,81 +131,102 @@
       background: radial-gradient(circle, var(--cor-de-fundo-dupla2) 0%, var(--cor-de-fundo-gradiente-dupla2) 100%);
     }
   </style>
-
   <script>
+  const registrarServiceWorkerDeFormaSilenciosa = () => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/domino/service-worker.js')
-        .then(() => console.log('Service Worker registrado!'))
-        .catch(err => console.error('Erro no registro do Service Worker:', err));
+        .catch(() => {}); // Ignora qualquer erro durante o registro
     }
-  </script>
+  };
+
+  registrarServiceWorkerDeFormaSilenciosa();
+</script>
 </head>
-
 <body>
-  <div class="container-principal">
-    <div class="cartao-da-dupla dupla" data-dupla="0">
-      <div class="placar" data-placar="0">0</div>
-      <div class="container-botoes">
-        <button class="botao-pontos" data-pontos="5">5</button>
-        <button class="botao-pontos" data-pontos="10">10</button>
-        <button class="botao-pontos" data-pontos="20">20</button>
-        <button class="botao-desfazer" data-dupla="0">
-          <svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="cartao-da-dupla dupla-2" data-dupla="1">
-      <div class="placar" data-placar="1">0</div>
-      <div class="container-botoes">
-        <button class="botao-pontos" data-pontos="5">5</button>
-        <button class="botao-pontos" data-pontos="10">10</button>
-        <button class="botao-pontos" data-pontos="20">20</button>
-        <button class="botao-desfazer" data-dupla="1">
-          <svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
+  <div class="container-principal" id="container-duplas"></div>
 
   <script>
-    let historico = [[], []];
+    const historicoDePontuacao = [[], []];
 
-    document.querySelectorAll('button').forEach(botao => {
-      botao.addEventListener('click', () => {
-        let indexDaDupla = botao.closest('.cartao-da-dupla').dataset.dupla;
-        let placar = botao.closest('.cartao-da-dupla').querySelector('.placar');
+    const duplasConfiguracoes = [
+      { id: 0, classe: 'dupla-1' },
+      { id: 1, classe: 'dupla-2' }
+    ];
 
-        if (botao.classList.contains('botao-pontos')) {
-          placar.textContent = parseInt(placar.textContent) + parseInt(botao.dataset.pontos);
-          historico[indexDaDupla].push(botao.dataset.pontos);
-        } else if (historico[indexDaDupla].length) {
-          placar.textContent -= historico[indexDaDupla].pop();
+    const containerDeDuplas = document.getElementById('container-duplas');
+
+    const criarCartaoParaCadaDupla = (duplaConfiguracao) => {
+      const cartaoDupla = document.createElement('div');
+      cartaoDupla.classList.add('cartao-dupla', duplaConfiguracao.classe);
+      cartaoDupla.dataset.dupla = duplaConfiguracao.id;
+
+      const placar = document.createElement('div');
+      placar.classList.add('placar');
+      placar.dataset.placar = duplaConfiguracao.id;
+      placar.textContent = '0';
+
+      const containerBotoes = document.createElement('div');
+      containerBotoes.classList.add('container-botoes');
+
+      [5, 10, 20].forEach(pontos => {
+        const botaoPontos = document.createElement('button');
+        botaoPontos.classList.add('botao-pontos');
+        botaoPontos.dataset.pontos = pontos;
+        botaoPontos.textContent = pontos;
+        
+        botaoPontos.addEventListener('click', () => {
+          placar.textContent = parseInt(placar.textContent) + pontos;
+          historicoDePontuacao[duplaConfiguracao.id].push(pontos);
+        });
+
+        containerBotoes.appendChild(botaoPontos);
+      });
+
+      const botaoDesfazer = document.createElement('button');
+      botaoDesfazer.classList.add('botao-desfazer');
+      botaoDesfazer.innerHTML = `
+        <svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/>
+        </svg>
+      `;
+
+      botaoDesfazer.addEventListener('click', () => {
+        if (historicoDePontuacao[duplaConfiguracao.id].length) {
+          placar.textContent = parseInt(placar.textContent) - historicoDePontuacao[duplaConfiguracao.id].pop();
         }
       });
-    });
 
-    let wakeLock = null;
+      containerBotoes.appendChild(botaoDesfazer);
+      cartaoDupla.appendChild(placar);
+      cartaoDupla.appendChild(containerBotoes);
+      containerDeDuplas.appendChild(cartaoDupla);
+    };
 
-    async function requestWakeLock() {
-      try {
-        wakeLock = await navigator.wakeLock.request('screen');
-        wakeLock.addEventListener('release', () => {
-          console.log('Wake Lock foi liberado');
-        });
-      } catch (err) {
-        console.error('Falha ao solicitar o Wake Lock:', err);
-      }
-    }
+    duplasConfiguracoes.forEach(dupla => criarCartaoParaCadaDupla(dupla));
+ 
+    const manterTelaSempreAtivaSemDesligar = async () => {
+      let bloqueioDeTelaAtiva = null;
 
-    if ('wakeLock' in navigator) {
-      requestWakeLock();
-    }
+      const solicitarBloqueioDeTelaAtiva = async () => {
+        try {
+          if (!bloqueioDeTelaAtiva) {
+            bloqueioDeTelaAtiva = await navigator.wakeLock.request('screen');
+          }
+        } catch (erro) {
+          // Ignora qualquer erro
+        }
+      };
+
+      window.addEventListener('load', solicitarBloqueioDeTelaAtiva);
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          solicitarBloqueioDeTelaAtiva();
+        }
+      });
+    };
+
+    manterTelaSempreAtivaSemDesligar();
   </script>
 </body>
-
 </html>
