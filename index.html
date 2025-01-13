@@ -7,7 +7,6 @@
   <link rel="manifest" href="/domino/manifest.json">
   <title>Placar Dominó</title>
   <style>
-    /* Definindo variáveis de cores e estilos globais */
     :root {
       --cor-de-fundo-dupla1: #E53935;
       --cor-de-fundo-dupla2: #3867d6;
@@ -44,7 +43,7 @@
       flex-direction: column;
       height: 100%;
       padding: 0.525rem;
-      gap: 0.525rem;
+      gap: 0.525em;
     }
 
     .cartao-dupla {
@@ -56,7 +55,7 @@
       border-radius: var(--raio-da-borda-botao);
       box-shadow: var(--sombra-dos-elementos);
       flex: 1;
-      gap: 0.1rem;
+      gap: 0.0em;
     }
 
     .placar {
@@ -70,6 +69,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-top: -1rem;
     }
 
     .container-botoes {
@@ -87,7 +87,7 @@
       background-color: var(--cor-botao);
       color: var(--cor-botao-icone);
       box-shadow: var(--sombra-dos-elementos);
-      font-size: 1.6rem;
+      font-size: 1.6em;
       font-weight: 850;
       text-align: center;
       cursor: pointer;
@@ -117,14 +117,12 @@
       outline: none;
     }
 
-    /* Layout em paisagem */
     @media (orientation: landscape) {
       .container-principal {
         flex-direction: row;
       }
     }
 
-    /* Estilos de fundo das duplas */
     .dupla-1 {
       background: radial-gradient(circle, var(--cor-de-fundo-dupla1) 40%, var(--cor-de-fundo-gradiente-dupla1) 99%);
     }
@@ -133,7 +131,6 @@
       background: radial-gradient(circle, var(--cor-de-fundo-dupla2) 40%, var(--cor-de-fundo-gradiente-dupla2) 99%);
     }
 
-    /* Estilos da caixa de texto para renomear a equipe */
     .input-nome-equipe {
       width: 100%;
       padding: 0.875rem;
@@ -142,28 +139,27 @@
       font-size: 1.5rem;
       font-weight: 750;
       background-color: rgba(207, 216, 220, 0.8);
-      margin-bottom: 0; /* Ajuste para alinhar melhor */
+      margin-bottom: 0;
       color: RGBA(0, 0, 0, 0.8);
     }
   
     .input-nome-equipe::placeholder {
-      color: RGBA(0, 0, 0, 0.8); /* Muda pra cor que você quiser */
-      opacity: 1; /* Garante que a opacidade não deixe o texto "apagado" demais */
+      color: RGBA(0, 0, 0, 0.8);
+      opacity: 1;
     }
   
     .input-nome-equipe:focus {
-      border: transparent; /* Deixa o fundo transparente */
-      outline: none; /* Remove o contorno padrão ao focar */
+      border: transparent;
+      outline: none;
     }
 
-    /* Ajuste responsivo para manter o layout lado a lado */
     .container-nome-desfazer {
       display: flex;
       align-items: center;
       justify-content: space-between;
       width: 100%;
       gap: 0.5rem;
-      height: auto; /* Corrigido para ser flexível */
+      height: auto;
     }
 
     .container-pontos {
