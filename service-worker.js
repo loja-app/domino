@@ -21,6 +21,7 @@ self.addEventListener("fetch", event => {
         atualizarCacheSilenciosamente(event.request);
         return response;
       }
+
       return fetch(event.request).then(networkResponse => {
         if (networkResponse && networkResponse.ok) {
           caches.open(CACHE_NAME).then(cache => {
@@ -47,12 +48,6 @@ const atualizarCacheSilenciosamente = async (request) => {
   }
 };
 
-const agendarAtualizacao = () => {
-  setInterval(() => {
-    atualizarCacheSilenciosamente();
-  }, 21600000);
-};
-
 self.addEventListener("activate", event => {
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
@@ -66,5 +61,4 @@ self.addEventListener("activate", event => {
       )
     )
   );
-  agendarAtualizacao();
 });
