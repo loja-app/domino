@@ -6,12 +6,21 @@
   <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
   <link rel="manifest" href="/domino/manifest.json">
   <title>Placar Dominó</title>
+  <script>
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/domino/service-worker.js');
+    });
+  </script>
+  
+  <!-- Importando fontes do Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --cor-de-fundo-dupla1: #E53935;
-      --cor-de-fundo-dupla2: #3867d6;
-      --cor-de-fundo-gradiente-dupla1: #EF5350;
-      --cor-de-fundo-gradiente-dupla2: #4b7bec;
+      --cor-de-fundo-dupla1: #66BB6A;
+      --cor-de-fundo-dupla2: #42A5F5;
+      --cor-de-fundo-gradiente-dupla1: #81C784;
+      --cor-de-fundo-gradiente-dupla2: #64B5F6;
       --cor-do-fundo-principal: #263238;
       --cor-placar: #FFFFFF;
       --raio-da-borda-botao: 0.625rem;
@@ -60,10 +69,10 @@
 
     .placar {
       font-size: 8rem;
-      font-weight: 850;
+      font-weight: 900;
       color: var(--cor-placar);
       text-align: center;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 3px 7px rgba(0, 0, 0, 0.15);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
       width: 100%;
       flex-grow: 1;
       display: flex;
@@ -142,12 +151,12 @@
       margin-bottom: 0;
       color: RGBA(0, 0, 0, 0.8);
     }
-  
+
     .input-nome-equipe::placeholder {
       color: RGBA(0, 0, 0, 0.8);
       opacity: 1;
     }
-  
+
     .input-nome-equipe:focus {
       border: transparent;
       outline: none;
