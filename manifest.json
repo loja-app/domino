@@ -20,10 +20,10 @@
   ],
   "screenshots": [
     {
-      "src": "/domino/screenshot.png",
-      "sizes": "720x1460",
+      "src": "",
+      "sizes": "",
       "type": "image/png",
-      "label": "Tela principal mostrando os placares e botões de controle"
+      "label": ""
     }
   ]
 }
