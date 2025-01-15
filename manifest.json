@@ -4,8 +4,8 @@
   "description": "Placar para jogo de Dominó. Adicione pontos tocando nos botões, use o botão de desfazer para corrigir erros e atualize a página para reiniciar os placares. Adicione o app à tela inicial e use offline sem problemas.",
   "start_url": "/domino/index.html",
   "display": "standalone",
-  "background_color": "#263238",
-  "theme_color": "#263238",
+  "background_color": "#212121",
+  "theme_color": "#212121",
   "icons": [
     {
       "src": "icon.png",
@@ -20,10 +20,10 @@
   ],
   "screenshots": [
     {
-      "src": "",
-      "sizes": "",
+      "src": "/domino/screenshot1.png",
+      "sizes": "720x1534",
       "type": "image/png",
-      "label": ""
+      "label": "Tela de Placar"
     }
   ]
 }
