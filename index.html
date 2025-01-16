@@ -11,187 +11,196 @@
         navigator.serviceWorker.register('/domino/service-worker.js');
       });
     </script>
-
-    <!-- Importando fontes do Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
     <style>
-  /* Definindo as variáveis */
-  :root {
-    --cor-fundo: #212121;
-    --cor-placar: rgba(33,33,33,0.90);
-    --cor-sombra: rgba(0, 0, 0, 0.2);
-    --cor-botao: rgba(255, 255, 255, 0.75);
-    --cor-botao-clicado: rgba(208, 208, 208, 0.85);
-    --cor-botao-desfazer: rgba(240, 240, 240, 0.75);
-    --cor-input: rgba(255, 255, 255, 0.55);
-    --cor-texto-input: rgba(0, 0, 0, 0.80);
-    --cor-placeholder: rgba(0, 0, 0, 0.60);
-    --font-size-placar: 8em;
-    --font-size-botao: 1.5rem;
-    --font-size-botao-desfazer: 0rem;
-    --font-size-input: 1.4rem;
-    --padding-botao: 0.875rem;
-    --padding-input: 0.675rem;
-    --border-radius: 0.625rem;
-    --box-shadow: 0 0.365rem 0.65rem rgba(0, 0, 0, 0.2);
-    --transition: 0.2s;
-  }
+      /* Definindo as variáveis */
+      :root {
+        --cor-fundo: #212121;
+        --cor-placar: rgba(33,33,33,0.80);
+        --cor-sombra: rgba(0, 0, 0, 0.2);
+        --cor-botao: rgba(255, 255, 255, 0.80);
+        --cor-botao-clicado: rgba(208, 208, 208, 0.80);
+        --cor-botao-desfazer: rgba(240, 240, 240, 0.80);
+        --cor-input: rgba(255, 255, 255, 0.70);
+        --cor-input-foco: rgb(62, 39, 35);
+        --cor-texto-input: rgba(0, 0, 0, 0.80);
+        --cor-placeholder: rgba(0, 0, 0, 0.50);
+        --font-size-placar: 8em;
+        --font-size-botao: 1.5rem;
+        --font-size-input: 1.0rem;
+        --padding-botao: 0.875rem;
+        --padding-input: 0.675rem;
+        --border-radius: 0.625rem;
+        --box-shadow: 0 0.355rem 0.55rem rgba(0, 0, 0, 0.2);
+        --transition: 0.2s;
+      }
 
-  /* Reset de margens e preenchimento */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    //border: 1px dashed red;
-  }
+      /* Reset de margens e preenchimento */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-  html, body {
-    width: 100%;
-    height: 100%;
-    background: var(--cor-fundo);
-    font-family: 'Roboto', sans-serif;
-    user-select: none;
-  }
+      html, body {
+        width: 100%;
+        height: 100%;
+        background: var(--cor-fundo);
+        font-family: 'Roboto', sans-serif;
+        user-select: none;
+      }
 
-  .container-principal {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 0.525rem;
-    gap: 0.525em;
-  }
+      /* Layout principal */
+      .container-principal {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 0.525rem;
+        gap: 0.525em;
+      }
 
-  .cartao-dupla {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 1.25rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    flex: 1;
-    gap: 0;
-  }
+      .cartao-dupla {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1.25rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        flex: 1;
+        gap: 0;
+      }
 
-  .placar {
-    font-size: var(--font-size-placar);
-    font-weight: 900;
-    color: var(--cor-placar);
-    text-align: center;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.24), 0 4px 8px rgba(0, 0, 0, 0.12);
-    width: 100%;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: -0.1rem;
-  }
+      .placar {
+        font-size: var(--font-size-placar);
+        font-weight: 900;
+        color: var(--cor-placar);
+        text-align: center;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.24), 0 4px 8px rgba(0, 0, 0, 0.12);
+        width: 100%;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: -0.1rem;
+      }
 
-  .container-botoes {
-    display: flex;
-    justify-content: space-between;
-    gap: 0.5rem;
-    width: 100%;
-  }
+      .container-botoes {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        width: 100%;
+      }
 
-  .botao {
-    flex: 1;
-    padding: var(--padding-botao);
-    border: none;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    font-size: var(--font-size-botao);
-    font-weight: 550;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color var(--transition), transform var(--transition);
-    -webkit-tap-highlight-color: transparent;
-    background-color: var(--cor-botao);
-  }
+      .botao {
+        flex: 1;
+        padding: var(--padding-botao);
+        border: none;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        font-size: var(--font-size-botao);
+        font-weight: 550;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color var(--transition), transform var(--transition);
+        -webkit-tap-highlight-color: transparent;
+        background-color: var(--cor-botao);
+      }
 
-  .botao:active {
-    background-color: var(--cor-botao-clicado);
-    transform: scale(0.95);
-  }
+      .botao:active {
+        background-color: var(--cor-botao-clicado);
+        transform: scale(0.95);
+      }
 
-  .botao-pontos {
-    font-size: var(--font-size-botao);
-  }
+      .botao-pontos {
+        font-size: var(--font-size-botao);
+      }
 
-  .botao-desfazer {
-    background-color: var(--cor-botao-desfazer);
-    font-size: var(--font-size-botao-desfazer);
-  }
+      .botao-desfazer {
+        background-color: var(--cor-botao-desfazer);
+        font-size: var(--font-size-botao);
+      }
 
-  .botao-desfazer svg {
-    width: 1.5rem;
-    height: 1.5rem;
-    display: block;
-    margin: 0 auto;
-    pointer-events: none;
-  }
+      .botao-desfazer svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        display: block;
+        margin: 0 auto;
+        pointer-events: none;
+      }
 
-  button:focus {
-    outline: none;
-  }
+      button:focus {
+        outline: none;
+      }
 
-  @media (orientation: landscape) {
-    .container-principal {
-      flex-direction: row;
-    }
-  }
+      @media (orientation: landscape) {
+        .container-principal {
+          flex-direction: row;
+        }
+      }
 
-  .dupla-1 {
-    background: #BDC3C7;
-  }
+      .dupla-1 {
+        background: #BDC3C7;
+      }
 
-  .dupla-2 {
-    background: #BCAAA4;
-  }
+      .dupla-2 {
+        background: #BCAAA4;
+      }
 
-  .input-nome-equipe {
-    width: 100%;
-    height: 100%;
-    padding: var(--padding-input);
-    border-radius: 0.5rem;
-    border: 2px solid transparent;
-    font-size: var(--font-size-input);
-    font-weight: 550;
-    background-color: var(--cor-input);
-    color: var(--cor-texto-input);
-    transition: border-color 0.3s ease, background-color 0.3s ease;
-    line-height: 1rem;
-    overflow: hidden;
-  }
+      /* Caixa de texto simplificada com linha embaixo */
+      .input-nome-equipe {
+        width: 100%;
+        padding: var(--padding-input);
+        border: none;
+        border-bottom: 2px solid var(--cor-placeholder);
+        background-color: transparent;
+        font-size: var(--font-size-input);
+        font-weight: 550;
+        color: var(--cor-texto-input);
+        transition: border-color var(--transition);
+        line-height: 2rem;
+      }
 
-  .input-nome-equipe::placeholder {
-    color: var(--cor-placeholder);
-  }
+      /* Placeholder */
+      .input-nome-equipe::placeholder {
+        color: var(--cor-placeholder);
+      }
 
-  .input-nome-equipe:focus {
-    outline: none;
-  }
+      /* Foco na caixa de texto */
+      .input-nome-equipe:focus {
+        outline: none;
+        border-bottom: 2px solid var(--cor-input-foco); /* Linha roxa quando em foco */
+      }
 
-  .container-nome-desfazer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    gap: 0.5rem;
-  }
+      /* Layout dos botões e desfazer */
+      .container-nome-desfazer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 0.5rem;
+      }
 
-  .container-pontos {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-</style>
+      .container-pontos {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .botao:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+        transform: none;
+        pointer-events: none;
+        transition: none;
+      }
+    </style>
   </head>
   <body>
     <div class="container-principal"></div>
-
     <script>
+      window.addEventListener('load', () => navigator.serviceWorker.register('/domino/service-worker.js'));
+
       const historicoDePontuacao = [[], []];
       const duplasConfiguracoes = [
         { classe: 'dupla-1' },
@@ -200,100 +209,126 @@
 
       const containerDeDuplas = document.querySelector('.container-principal');
 
-      const criarBotaoPontos = (pontos, placar, id) => {
+      // Função para atualizar o estado dos botões
+      const atualizarEstadoDosBotoes = (placar, botoes, botaoDesfazer) => {
+        const valorAtual = parseInt(placar.textContent);
+        botoes.forEach(botao => {
+          const pontos = parseInt(botao.dataset.pontos);
+          botao.disabled = valorAtual + pontos > 995;
+        });
+        botaoDesfazer.disabled = valorAtual === 0;
+      };
+
+      // Função pura para criar o botão de pontos
+      const criarBotaoPontos = (pontos, placar, botoes, botaoDesfazer) => {
         const botaoPontos = document.createElement('button');
         botaoPontos.classList.add('botao', 'botao-pontos');
         botaoPontos.dataset.pontos = pontos;
         botaoPontos.textContent = pontos;
 
-        botaoPontos.addEventListener('click', () => {
-          placar.textContent = parseInt(placar.textContent) + pontos;
-          historicoDePontuacao[id].push(pontos);
-        });
+        const handleClick = () => {
+          const valorAtual = parseInt(placar.textContent);
+          if (valorAtual + pontos <= 995) {
+            placar.textContent = valorAtual + pontos;
+            historicoDePontuacao[0].push(pontos);
+            atualizarEstadoDosBotoes(placar, botoes, botaoDesfazer);
+          }
+        };
 
+        botaoPontos.addEventListener('click', handleClick);
         return botaoPontos;
       };
 
-      const criarBotaoDesfazer = (placar, id) => {
+      // Função pura para criar o botão de desfazer
+      const criarBotaoDesfazer = (placar, botoes) => {
         const botaoDesfazer = document.createElement('button');
         botaoDesfazer.classList.add('botao', 'botao-desfazer');
-        botaoDesfazer.innerHTML = `
-          <svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/>
-          </svg>
-        `;
+        botaoDesfazer.innerHTML = `<svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/></svg>`;
 
-        botaoDesfazer.addEventListener('click', () => {
-          if (historicoDePontuacao[id].length) {
-            placar.textContent = parseInt(placar.textContent) - historicoDePontuacao[id].pop();
+        // Habilitar/desabilitar o botão de desfazer
+        botaoDesfazer.disabled = historicoDePontuacao[0].length === 0;
+
+        const handleDesfazer = () => {
+          if (historicoDePontuacao[0].length) {
+            const ultimoPonto = historicoDePontuacao[0].pop();
+            placar.textContent = parseInt(placar.textContent) - ultimoPonto;
+            atualizarEstadoDosBotoes(placar, botoes, botaoDesfazer);
           }
-        });
+        };
 
+        botaoDesfazer.addEventListener('click', handleDesfazer);
         return botaoDesfazer;
       };
 
-      const criarCartaoParaCadaDupla = (duplaConfiguracao, id) => {
+      // Funções de limpeza de input
+      const sanitizeInput = input => input.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿçÇ0-9_\-\/\|\s.]/g, '');
+      const limitLength = (input, maxLength = 30) => input.slice(0, maxLength);
+
+      // Função para tratar inputs e colagens
+      const handleInput = inputElement => inputElement.value = limitLength(sanitizeInput(inputElement.value), 30);
+      const handlePaste = (inputElement, event) => {
+        event.preventDefault();
+        const pastedText = event.clipboardData.getData('text');
+        inputElement.value = limitLength(sanitizeInput(pastedText), 30);
+      };
+
+      // Função para criar o cartão da dupla
+      const criarCartaoParaCadaDupla = ({ classe }) => {
         const cartaoDupla = document.createElement('div');
-        cartaoDupla.classList.add('cartao-dupla', duplaConfiguracao.classe);
-        cartaoDupla.dataset.dupla = id;
+        cartaoDupla.classList.add('cartao-dupla', classe);
 
         const placar = document.createElement('div');
         placar.classList.add('placar');
-        placar.dataset.placar = id;
         placar.textContent = '0';
-
-        const containerNomeDesfazer = document.createElement('div');
-        containerNomeDesfazer.classList.add('container-nome-desfazer');
 
         const inputNomeEquipe = document.createElement('input');
         inputNomeEquipe.classList.add('input-nome-equipe');
-        inputNomeEquipe.placeholder = `Dupla ${id + 1}`;
-        inputNomeEquipe.value = localStorage.getItem(`nome-equipe-${id}`) || '';
-        inputNomeEquipe.addEventListener('input', () => {
-          localStorage.setItem(`nome-equipe-${id}`, inputNomeEquipe.value);
-        });
+        inputNomeEquipe.placeholder = 'Nome';
+        inputNomeEquipe.addEventListener('input', () => handleInput(inputNomeEquipe));
+        inputNomeEquipe.addEventListener('paste', event => handlePaste(inputNomeEquipe, event));
 
-        const botaoDesfazer = criarBotaoDesfazer(placar, id);
+        const botoes = [];
+        const botaoDesfazer = criarBotaoDesfazer(placar, botoes);
 
-        containerNomeDesfazer.appendChild(inputNomeEquipe);
-        containerNomeDesfazer.appendChild(botaoDesfazer);
+        const containerNomeDesfazer = document.createElement('div');
+        containerNomeDesfazer.classList.add('container-nome-desfazer');
+        containerNomeDesfazer.append(inputNomeEquipe, botaoDesfazer);
 
         const containerBotoes = document.createElement('div');
         containerBotoes.classList.add('container-botoes');
         [5, 10, 20, 50].forEach(pontos => {
-          const botaoPontos = criarBotaoPontos(pontos, placar, id);
+          const botaoPontos = criarBotaoPontos(pontos, placar, botoes, botaoDesfazer);
+          botoes.push(botaoPontos);
           containerBotoes.appendChild(botaoPontos);
         });
 
-        cartaoDupla.appendChild(containerNomeDesfazer);
-        cartaoDupla.appendChild(placar);
-        cartaoDupla.appendChild(containerBotoes);
+        cartaoDupla.append(containerNomeDesfazer, placar, containerBotoes);
         containerDeDuplas.appendChild(cartaoDupla);
-    };
 
-    duplasConfiguracoes.forEach((dupla, index) => criarCartaoParaCadaDupla(dupla, index));
+        atualizarEstadoDosBotoes(placar, botoes, botaoDesfazer);
+      };
 
-    const manterTelaSempreAtivaSemDesligar = () => {
+      // Criando os cartões para cada dupla
+      duplasConfiguracoes.forEach(criarCartaoParaCadaDupla);
+
+      // Função que mantém a tela ativa e impede que o dispositivo entre em modo de hibernação.
+      const manterTelaSempreAtivaSemDesligar = () => {
         let wakeLock = null;
 
         const solicitarWakeLock = async () => {
-            if (!wakeLock) wakeLock = await navigator.wakeLock.request('screen');
-        };
-
-        const liberarWakeLock = () => {
-            wakeLock?.release();
-            wakeLock = null;
+          wakeLock = await navigator.wakeLock.request('screen');
+          wakeLock.addEventListener('release', () => wakeLock = null);
         };
 
         window.addEventListener('load', solicitarWakeLock);
         document.addEventListener('visibilitychange', () => {
-            document.visibilityState === 'visible' ? solicitarWakeLock() : liberarWakeLock();
+          if (document.visibilityState === 'visible') solicitarWakeLock();
         });
 
-        if (document.visibilityState === 'visible') solicitarWakeLock();
-    };
+        solicitarWakeLock();
+      };
 
-    manterTelaSempreAtivaSemDesligar();
-</script>
-</body>
+      manterTelaSempreAtivaSemDesligar();
+    </script>
+  </body>
 </html>
