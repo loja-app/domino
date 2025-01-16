@@ -1,337 +1,362 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <meta name="theme-color" content="#212121">
-    <link rel="manifest" href="/domino/manifest.json">
-    <title>Placar Dominó</title>
-    <script>
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/domino/service-worker.js');
-      });
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-      :root {
-        --cor-fundo: #212121;
-        --cor-placar: rgba(33,33,33,0.80);
-        --cor-sombra: rgba(0, 0, 0, 0.2);
-        --cor-botao: rgba(255, 255, 255, 0.80);
-        --cor-botao-clicado: rgba(208, 208, 208, 0.80);
-        --cor-botao-desfazer: rgba(240, 240, 240, 0.80);
-        --cor-input: rgba(255, 255, 255, 0.70);
-        --cor-input-foco: rgb(62, 39, 35);
-        --cor-texto-input: rgba(0, 0, 0, 0.80);
-        --cor-placeholder: rgba(0, 0, 0, 0.45);
-        --font-size-placar: 8em;
-        --font-size-botao: 1.5rem;
-        --font-size-input: 1.2rem;
-        --padding-botao: 0.875rem;
-        --padding-input: 0.675rem;
-        --border-radius: 0.625rem;
-        --box-shadow: 0 0.355rem 0.55rem rgba(0, 0, 0, 0.2);
-        --transition: 0.2s;
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      html, body {
-        width: 100%;
-        height: 100%;
-        background: var(--cor-fundo);
-        font-family: 'Roboto', sans-serif;
-        user-select: none;
-      }
-
-      .container-principal {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        padding: 0.525rem;
-        gap: 0.525em;
-      }
-
-      .cartao-dupla {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 1.25rem;
-        border-radius: var(--border-radius);
-        box-shadow: var(--box-shadow);
-        flex: 1;
-        gap: 0;
-      }
-
-      .placar {
-        font-size: var(--font-size-placar);
-        font-weight: 900;
-        color: var(--cor-placar);
-        text-align: center;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.24), 0 4px 8px rgba(0, 0, 0, 0.12);
-        width: 100%;
-        flex-grow: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: -0.1rem;
-      }
-
-      .container-botoes {
-        display: flex;
-        justify-content: space-between;
-        gap: 0.5rem;
-        width: 100%;
-      }
-
-      .botao {
-        flex: 1;
-        padding: var(--padding-botao);
-        border: none;
-        border-radius: var(--border-radius);
-        box-shadow: var(--box-shadow);
-        font-size: var(--font-size-botao);
-        font-weight: 550;
-        text-align: center;
-        cursor: pointer;
-        transition: background-color var(--transition), transform var(--transition);
-        -webkit-tap-highlight-color: transparent;
-        background-color: var(--cor-botao);
-      }
-
-      .botao:active {
-        background-color: var(--cor-botao-clicado);
-        transform: scale(0.95);
-      }
-
-      .botao-pontos {
-        font-size: var(--font-size-botao);
-      }
-
-      .botao-desfazer {
-        background-color: var(--cor-botao-desfazer);
-        font-size: var(--font-size-botao);
-      }
-
-      .botao-desfazer svg {
-        width: 1.5rem;
-        height: 1.5rem;
-        display: block;
-        margin: 0 auto;
-        pointer-events: none;
-      }
-
-      button:focus {
-        outline: none;
-      }
-
-      @media (orientation: landscape) {
-        .container-principal {
-          flex-direction: row;
-        }
-      }
-
-      .dupla-1 {
-        background: #BDC3C7;
-      }
-
-      .dupla-2 {
-        background: #BCAAA4;
-      }
-
-      .input-nome-equipe {
-        width: 100%;
-        padding: var(--padding-input);
-        border: none;
-        border-bottom: 2px solid var(--cor-placeholder);
-        background-color: transparent;
-        font-size: var(--font-size-input);
-        font-weight: 650;
-        color: var(--cor-texto-input);
-        transition: border-color var(--transition);
-        line-height: 2rem;
-      }
-
-      .input-nome-equipe:focus {
-        outline: none;
-        border-bottom: 2px solid var(--cor-input-foco);
-      }
-
-      .input-nome-equipe:not(:placeholder-shown) {
-        border-bottom: 2px solid var(--cor-input-foco);
-      }
-
-      .input-nome-equipe::placeholder {
-        color: var(--cor-placeholder);
-        font-size: var(--font-size-input);
-      }
-
-      .container-nome-desfazer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        gap: 0.5rem;
-      }
-
-      .container-pontos {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-      }
-
-      .botao:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
-        transform: none;
-        pointer-events: none;
-        transition: none;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container-principal"></div>
-    <script>
-      window.addEventListener('load', () => navigator.serviceWorker.register('/domino/service-worker.js'));
-
-      const historicoDePontuacao = [[0], [0]];
-      const duplasConfiguracoes = [
-        { classe: 'dupla-1' },
-        { classe: 'dupla-2' }
-      ];
-
-      const containerDeDuplas = document.querySelector('.container-principal');
-
-      const atualizarEstadoDosBotoes = (placar, botoes, botaoDesfazer) => {
-        const valorAtual = parseInt(placar.textContent);
-        botaoDesfazer.disabled = valorAtual === 0;
-
-        botoes.forEach(botao => {
-          const pontos = parseInt(botao.dataset.pontos);
-          botao.disabled = valorAtual + pontos > 995;
-        });
-      };
-
-      const criarBotaoPontos = (pontos, placar, botoes, botaoDesfazer) => {
-        const botaoPontos = document.createElement('button');
-        botaoPontos.classList.add('botao', 'botao-pontos');
-        botaoPontos.dataset.pontos = pontos;
-        botaoPontos.textContent = pontos;
-
-        botaoPontos.addEventListener('click', () => {
-          const valorAtual = parseInt(placar.textContent);
-          if (valorAtual + pontos <= 995) {
-            historicoDePontuacao[0].push(pontos);
-            placar.textContent = valorAtual + pontos;
-            atualizarEstadoDosBotoes(placar, botoes, botaoDesfazer);
-          }
-        });
-
-        return botaoPontos;
-      };
-
-      const criarBotaoDesfazer = (placar, botoes) => {
-        const botaoDesfazer = document.createElement('button');
-        botaoDesfazer.classList.add('botao', 'botao-desfazer');
-        botaoDesfazer.innerHTML = `
-          <svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/>
-          </svg>
-        `;
-
-        botaoDesfazer.addEventListener('click', () => {
-          const valorAtual = parseInt(placar.textContent);
-          if (valorAtual > 0 && historicoDePontuacao[0].length > 1) {
-            const ultimoPonto = historicoDePontuacao[0].pop();
-            placar.textContent = valorAtual - ultimoPonto;
-            atualizarEstadoDosBotoes(placar, botoes, botaoDesfazer);
-          }
-        });
-
-        atualizarEstadoDosBotoes(placar, botoes, botaoDesfazer);
-
-        return botaoDesfazer;
-      };
-
-      const sanitizeInput = input => input.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿçÇ0-9_\-\/\|\s.]/g, '');
-      const limitLength = (input, maxLength = 30) => input.slice(0, maxLength);
-
-      const handleInput = (inputElement) => {
-        inputElement.value = limitLength(sanitizeInput(inputElement.value), 30);
-        localStorage.setItem(inputElement.name, inputElement.value);
-      };
-
-      const handlePaste = (inputElement, event) => {
-        event.preventDefault();
-        inputElement.value = limitLength(sanitizeInput(event.clipboardData.getData('text')), 30);
-        localStorage.setItem(inputElement.name, inputElement.value);
-      };
-
-      const criarCartaoParaCadaDupla = ({ classe }) => {
-        const cartaoDupla = document.createElement('div');
-        cartaoDupla.classList.add('cartao-dupla', classe);
-
-        const placar = document.createElement('div');
-        placar.classList.add('placar');
-        placar.textContent = '0';
-
-        const inputNomeEquipe = document.createElement('input');
-        inputNomeEquipe.classList.add('input-nome-equipe');
-        inputNomeEquipe.placeholder = 'Nome';
-        inputNomeEquipe.name = classe;
-        inputNomeEquipe.addEventListener('input', () => handleInput(inputNomeEquipe));
-        inputNomeEquipe.addEventListener('paste', event => handlePaste(inputNomeEquipe, event));
-
-        const nomeSalvo = localStorage.getItem(inputNomeEquipe.name);
-        if (nomeSalvo) {
-          inputNomeEquipe.value = nomeSalvo;
-        }
-
-        const botoes = [];
-        const botaoDesfazer = criarBotaoDesfazer(placar, botoes);
-
-        const containerNomeDesfazer = document.createElement('div');
-        containerNomeDesfazer.classList.add('container-nome-desfazer');
-        containerNomeDesfazer.append(inputNomeEquipe, botaoDesfazer);
-
-        const containerBotoes = document.createElement('div');
-        containerBotoes.classList.add('container-botoes');
-        [5, 10, 20, 50].forEach(pontos => {
-          const botaoPontos = criarBotaoPontos(pontos, placar, botoes, botaoDesfazer);
-          botoes.push(botaoPontos);
-          containerBotoes.appendChild(botaoPontos);
-        });
-
-        cartaoDupla.append(containerNomeDesfazer, placar, containerBotoes);
-        containerDeDuplas.appendChild(cartaoDupla);
-
-        atualizarEstadoDosBotoes(placar, botoes, botaoDesfazer);
-      };
-
-      duplasConfiguracoes.forEach(criarCartaoParaCadaDupla);
-
-      const manterTelaSempreAtivaSemDesligar = () => {
-        let wakeLock = null;
-
-        const solicitarWakeLock = async () => {
-          wakeLock = await navigator.wakeLock.request('screen');
-          wakeLock.addEventListener('release', () => wakeLock = null);
-        };
-
-        window.addEventListener('load', solicitarWakeLock);
-        document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'visible') solicitarWakeLock();
-        });
-
-        solicitarWakeLock();
-      };
-
-      manterTelaSempreAtivaSemDesligar();
-    </script>
-  </body>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+      <meta name="theme-color" content="#212121">
+      <link rel="manifest" href="/domino/manifest.json">
+      <title>Placar Dominó</title>
+      <script>
+         window.addEventListener('load', () => {
+           navigator.serviceWorker.register('/domino/service-worker.js');
+         });
+      </script>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+      <style>
+         :root {
+         --cor-fundo: #212121;
+         --cor-placar: rgba(33,33,33,0.80);
+         --cor-sombra: rgba(0, 0, 0, 0.2);
+         --cor-botao: rgba(255, 255, 255, 0.80);
+         --cor-botao-clicado: rgba(208, 208, 208, 0.80);
+         --cor-botao-desfazer: rgba(240, 240, 240, 0.80);
+         --cor-input: rgba(255, 255, 255, 0.70);
+         --cor-input-foco: rgb(62, 39, 35);
+         --cor-texto-input: rgba(0, 0, 0, 0.80);
+         --cor-placeholder: rgba(0, 0, 0, 0.45);
+         --font-size-placar: 8em;
+         --font-size-botao: 1.5rem;
+         --font-size-input: 1.2rem;
+         --padding-botao: 0.875rem;
+         --padding-input: 0.675rem;
+         --border-radius: 0.625rem;
+         --box-shadow: 0 0.355rem 0.55rem rgba(0, 0, 0, 0.2);
+         --transition: 0.2s;
+         }
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         }
+         html, body {
+         width: 100%;
+         height: 100%;
+         background: var(--cor-fundo);
+         font-family: 'Roboto', sans-serif;
+         user-select: none;
+         }
+         .container-principal {
+         display: flex;
+         flex-direction: column;
+         height: 100%;
+         padding: 0.525rem;
+         gap: 0.525em;
+         }
+         .cartao-dupla {
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         padding: 1.25rem;
+         border-radius: var(--border-radius);
+         box-shadow: var(--box-shadow);
+         flex: 1;
+         gap: 0;
+         }
+         .placar {
+         font-size: var(--font-size-placar);
+         font-weight: 900;
+         color: var(--cor-placar);
+         text-align: center;
+         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.24), 0 4px 8px rgba(0, 0, 0, 0.12);
+         width: 100%;
+         flex-grow: 1;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         margin-top: -0.1rem;
+         }
+         .container-botoes {
+         display: flex;
+         justify-content: space-between;
+         gap: 0.5rem;
+         width: 100%;
+         }
+         .botao {
+         flex: 1;
+         padding: var(--padding-botao);
+         border: none;
+         border-radius: var(--border-radius);
+         box-shadow: var(--box-shadow);
+         font-size: var(--font-size-botao);
+         font-weight: 550;
+         text-align: center;
+         cursor: pointer;
+         transition: background-color var(--transition), transform var(--transition);
+         -webkit-tap-highlight-color: transparent;
+         background-color: var(--cor-botao);
+         }
+         .botao:active {
+         background-color: var(--cor-botao-clicado);
+         transform: scale(0.95);
+         }
+         .botao-pontos {
+         font-size: var(--font-size-botao);
+         }
+         .botao-desfazer {
+         background-color: var(--cor-botao-desfazer);
+         font-size: var(--font-size-botao);
+         }
+         .botao-desfazer svg {
+         width: 1.5rem;
+         height: 1.5rem;
+         display: block;
+         margin: 0 auto;
+         pointer-events: none;
+         }
+         button:focus {
+         outline: none;
+         }
+         @media (orientation: landscape) {
+         .container-principal {
+         flex-direction: row;
+         }
+         }
+         .dupla-1 {
+         background: #BDC3C7;
+         }
+         .dupla-2 {
+         background: #BCAAA4;
+         }
+         .input-nome-equipe {
+         width: 100%;
+         padding: var(--padding-input);
+         border: none;
+         border-bottom: 2px solid var(--cor-placeholder);
+         background-color: transparent;
+         font-size: var(--font-size-input);
+         font-weight: 650;
+         color: var(--cor-texto-input);
+         transition: border-color var(--transition);
+         line-height: 2rem;
+         }
+         .input-nome-equipe:focus {
+         outline: none;
+         border-bottom: 2px solid var(--cor-input-foco);
+         }
+         .input-nome-equipe:not(:placeholder-shown) {
+         border-bottom: 2px solid var(--cor-input-foco);
+         }
+         .input-nome-equipe::placeholder {
+         color: var(--cor-placeholder);
+         font-size: var(--font-size-input);
+         }
+         .container-nome-desfazer {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         width: 100%;
+         gap: 0.5rem;
+         }
+         .container-pontos {
+         display: flex;
+         justify-content: center;
+         width: 100%;
+         }
+         .botao:disabled {
+         cursor: not-allowed;
+         opacity: 0.5;
+         transform: none;
+         pointer-events: none;
+         transition: none;
+         }
+      </style>
+   </head>
+   <body>
+      <div class="container-principal">
+         <div class="cartao-dupla dupla-1">
+            <div class="container-nome-desfazer">
+               <input class="input-nome-equipe" placeholder="Nome" name="dupla-1" />
+               <button class="botao botao-desfazer">
+                  <svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/>
+                  </svg>
+               </button>
+            </div>
+            <div class="placar">0</div>
+            <div class="container-botoes">
+               <button class="botao botao-pontos" data-pontos="5">5</button>
+               <button class="botao botao-pontos" data-pontos="10">10</button>
+               <button class="botao botao-pontos" data-pontos="20">20</button>
+               <button class="botao botao-pontos" data-pontos="50">50</button>
+            </div>
+         </div>
+         <div class="cartao-dupla dupla-2">
+            <div class="container-nome-desfazer">
+               <input class="input-nome-equipe" placeholder="Nome" name="dupla-2" />
+               <button class="botao botao-desfazer">
+                  <svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/>
+                  </svg>
+               </button>
+            </div>
+            <div class="placar">0</div>
+            <div class="container-botoes">
+               <button class="botao botao-pontos" data-pontos="5">5</button>
+               <button class="botao botao-pontos" data-pontos="10">10</button>
+               <button class="botao botao-pontos" data-pontos="20">20</button>
+               <button class="botao botao-pontos" data-pontos="50">50</button>
+            </div>
+         </div>
+      </div>
+      <script>
+         // Função para validar os nomes das duplas (inclui acentuação, letras especiais e símbolos)
+         const validarNome = (nome) => {
+             const regex = /^[A-Za-z0-9À-ÿ ./_-]*$/; // Aceita letras (acentuadas), números, espaço, ponto, barra, hífen e sublinhado
+             return regex.test(nome);
+         };
+         
+         // Função para tratar o evento de input no campo de nome
+         const tratarNomeInput = (evento) => {
+             const nome = evento.target.value;
+             if (!validarNome(nome)) {
+                 // Remove o último caractere não permitido
+                 evento.target.value = nome.slice(0, -1);
+             }
+         };
+         
+         // Selecionando as caixas de texto de nome
+         const inputNomeDupla1 = document.querySelector('.dupla-1 .input-nome-equipe');
+         const inputNomeDupla2 = document.querySelector('.dupla-2 .input-nome-equipe');
+         
+         // Adicionando o evento de input nas caixas de texto
+         inputNomeDupla1.addEventListener('input', tratarNomeInput);
+         inputNomeDupla2.addEventListener('input', tratarNomeInput);
+         
+         // Função pura para adicionar pontos ao placar
+         const adicionarPontos = (placar, pontos) => placar + pontos;
+         
+         // Função para verificar se o botão de pontos pode ser habilitado (não ultrapassando o limite)
+         const podeHabilitarBotaoPontos = (placar, pontos, limite = 995) => placar + pontos <= limite;
+         
+         // Função para desabilitar botões de pontos (caso ultrapassem o limite)
+         const desabilitarBotoesPontos = (placar, botoes, limite = 995) => {
+             botoes.forEach(botao => {
+                 const pontos = parseInt(botao.dataset.pontos, 10);
+                 botao.disabled = !podeHabilitarBotaoPontos(placar, pontos, limite);
+             });
+         };
+         
+         // Função para verificar se o botão de desfazer deve ser desabilitado
+         const desabilitarBotaoDesfazer = (placar, botaoDesfazer) => {
+             botaoDesfazer.disabled = placar === 0;
+         };
+         
+         // Função para atualizar o placar, respeitando o limite
+         const atualizarPlacar = (placar, pontos, limite = 995) => {
+             const novoPlacar = adicionarPontos(placar, pontos);
+             return novoPlacar <= limite ? novoPlacar : placar; // Não deixa ultrapassar o limite
+         };
+         
+         // Inicializando o placar das duplas
+         let placarDupla1 = 0;
+         let placarDupla2 = 0;
+         
+         // Histórico de pontos adicionados para desfazer
+         const historicoPontosDupla1 = [];
+         const historicoPontosDupla2 = [];
+         
+         // Selecionando os botões e a tela de placar
+         const botoesPontosDupla1 = document.querySelectorAll('.dupla-1 .botao-pontos');
+         const botoesPontosDupla2 = document.querySelectorAll('.dupla-2 .botao-pontos');
+         const botaoDesfazerDupla1 = document.querySelector('.dupla-1 .botao-desfazer');
+         const botaoDesfazerDupla2 = document.querySelector('.dupla-2 .botao-desfazer');
+         const placarElementDupla1 = document.querySelector('.dupla-1 .placar');
+         const placarElementDupla2 = document.querySelector('.dupla-2 .placar');
+         
+         // Função para atualizar a interface
+         const atualizarInterface = () => {
+             placarElementDupla1.textContent = placarDupla1;
+             placarElementDupla2.textContent = placarDupla2;
+         
+             // Desabilita os botões de pontos para cada dupla
+             desabilitarBotoesPontos(placarDupla1, botoesPontosDupla1);
+             desabilitarBotoesPontos(placarDupla2, botoesPontosDupla2);
+         
+             // Desabilita os botões de desfazer
+             desabilitarBotaoDesfazer(placarDupla1, botaoDesfazerDupla1);
+             desabilitarBotaoDesfazer(placarDupla2, botaoDesfazerDupla2);
+         };
+         
+         // Função para desfazer a última ação
+         const desfazerUltimaAcao = (placar, historico, placarElement) => {
+             if (historico.length > 0) {
+                 const ultimoPonto = historico.pop();
+                 placar -= ultimoPonto; // Remove o último ponto
+                 placarElement.textContent = placar;
+             }
+             return placar;
+         };
+         
+         // Adicionando eventos de clique nos botões de pontos
+         botoesPontosDupla1.forEach(botao => {
+             botao.addEventListener('click', () => {
+                 const pontos = parseInt(botao.dataset.pontos, 10);
+                 historicoPontosDupla1.push(pontos); // Armazena o valor no histórico
+                 placarDupla1 = atualizarPlacar(placarDupla1, pontos);
+                 atualizarInterface();
+             });
+         });
+         
+         botoesPontosDupla2.forEach(botao => {
+             botao.addEventListener('click', () => {
+                 const pontos = parseInt(botao.dataset.pontos, 10);
+                 historicoPontosDupla2.push(pontos); // Armazena o valor no histórico
+                 placarDupla2 = atualizarPlacar(placarDupla2, pontos);
+                 atualizarInterface();
+             });
+         });
+         
+         // Evento do botão desfazer para dupla 1
+         botaoDesfazerDupla1.addEventListener('click', () => {
+             placarDupla1 = desfazerUltimaAcao(placarDupla1, historicoPontosDupla1, placarElementDupla1);
+             atualizarInterface();
+         });
+         
+         // Evento do botão desfazer para dupla 2
+         botaoDesfazerDupla2.addEventListener('click', () => {
+             placarDupla2 = desfazerUltimaAcao(placarDupla2, historicoPontosDupla2, placarElementDupla2);
+             atualizarInterface();
+         });
+         
+         // Inicializa a interface
+         atualizarInterface();
+           
+           
+           // Função para manter a tela sempre ativa e evitar que ela desligue automaticamente
+         const manterTelaSempreAtiva = () => {
+         let wakeLock = null;
+         
+         // Função para solicitar o Wake Lock e manter a tela ativa
+         const solicitarWakeLock = async () => {
+         wakeLock = await navigator.wakeLock.request('screen');
+         wakeLock.addEventListener('release', () => wakeLock = null);
+         };
+         
+         // Quando a página é carregada, solicita o Wake Lock
+         window.addEventListener('load', solicitarWakeLock);
+         
+         // Quando a visibilidade da página muda, solicita o Wake Lock novamente se a página estiver visível
+         document.addEventListener('visibilitychange', () => {
+         if (document.visibilityState === 'visible') solicitarWakeLock();
+         });
+         
+         // Solicita o Wake Lock ao inicializar
+         solicitarWakeLock();
+         };
+         
+         // Chama a função para manter a tela sempre ativa
+         manterTelaSempreAtiva();
+      </script>
+   </body>
 </html>
