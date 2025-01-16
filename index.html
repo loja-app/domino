@@ -13,7 +13,6 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-      /* Definindo as variáveis */
       :root {
         --cor-fundo: #212121;
         --cor-placar: rgba(33,33,33,0.80);
@@ -24,10 +23,10 @@
         --cor-input: rgba(255, 255, 255, 0.70);
         --cor-input-foco: rgb(62, 39, 35);
         --cor-texto-input: rgba(0, 0, 0, 0.80);
-        --cor-placeholder: rgba(0, 0, 0, 0.50);
+        --cor-placeholder: rgba(0, 0, 0, 0.45);
         --font-size-placar: 8em;
         --font-size-botao: 1.5rem;
-        --font-size-input: 1.0rem;
+        --font-size-input: 1.2rem;
         --padding-botao: 0.875rem;
         --padding-input: 0.675rem;
         --border-radius: 0.625rem;
@@ -35,7 +34,6 @@
         --transition: 0.2s;
       }
 
-      /* Reset de margens e preenchimento */
       * {
         margin: 0;
         padding: 0;
@@ -50,7 +48,6 @@
         user-select: none;
       }
 
-      /* Layout principal */
       .container-principal {
         display: flex;
         flex-direction: column;
@@ -147,7 +144,6 @@
         background: #BCAAA4;
       }
 
-      /* Caixa de texto simplificada com linha embaixo */
       .input-nome-equipe {
         width: 100%;
         padding: var(--padding-input);
@@ -155,24 +151,26 @@
         border-bottom: 2px solid var(--cor-placeholder);
         background-color: transparent;
         font-size: var(--font-size-input);
-        font-weight: 550;
+        font-weight: 650;
         color: var(--cor-texto-input);
         transition: border-color var(--transition);
         line-height: 2rem;
       }
 
-      /* Placeholder */
-      .input-nome-equipe::placeholder {
-        color: var(--cor-placeholder);
-      }
-
-      /* Foco na caixa de texto */
       .input-nome-equipe:focus {
         outline: none;
-        border-bottom: 2px solid var(--cor-input-foco); /* Linha roxa quando em foco */
+        border-bottom: 2px solid var(--cor-input-foco);
       }
 
-      /* Layout dos botões e desfazer */
+      .input-nome-equipe:not(:placeholder-shown) {
+        border-bottom: 2px solid var(--cor-input-foco);
+      }
+
+      .input-nome-equipe::placeholder {
+        color: var(--cor-placeholder);
+        font-size: var(--font-size-input);
+      }
+
       .container-nome-desfazer {
         display: flex;
         align-items: center;
@@ -201,7 +199,7 @@
     <script>
       window.addEventListener('load', () => navigator.serviceWorker.register('/domino/service-worker.js'));
 
-      const historicoDePontuacao = [[], []];
+      const historicoDePontuacao = [[0], [0]];
       const duplasConfiguracoes = [
         { classe: 'dupla-1' },
         { classe: 'dupla-2' }
@@ -209,70 +207,66 @@
 
       const containerDeDuplas = document.querySelector('.container-principal');
 
-      // Função para atualizar o estado dos botões
       const atualizarEstadoDosBotoes = (placar, botoes, botaoDesfazer) => {
         const valorAtual = parseInt(placar.textContent);
+        botaoDesfazer.disabled = valorAtual === 0;
+
         botoes.forEach(botao => {
           const pontos = parseInt(botao.dataset.pontos);
           botao.disabled = valorAtual + pontos > 995;
         });
-        botaoDesfazer.disabled = valorAtual === 0;
       };
 
-      // Função pura para criar o botão de pontos
       const criarBotaoPontos = (pontos, placar, botoes, botaoDesfazer) => {
         const botaoPontos = document.createElement('button');
         botaoPontos.classList.add('botao', 'botao-pontos');
         botaoPontos.dataset.pontos = pontos;
         botaoPontos.textContent = pontos;
 
-        const handleClick = () => {
+        botaoPontos.addEventListener('click', () => {
           const valorAtual = parseInt(placar.textContent);
           if (valorAtual + pontos <= 995) {
-            placar.textContent = valorAtual + pontos;
             historicoDePontuacao[0].push(pontos);
+            placar.textContent = valorAtual + pontos;
             atualizarEstadoDosBotoes(placar, botoes, botaoDesfazer);
           }
-        };
+        });
 
-        botaoPontos.addEventListener('click', handleClick);
         return botaoPontos;
       };
 
-      // Função pura para criar o botão de desfazer
       const criarBotaoDesfazer = (placar, botoes) => {
         const botaoDesfazer = document.createElement('button');
         botaoDesfazer.classList.add('botao', 'botao-desfazer');
-        botaoDesfazer.innerHTML = `<svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/></svg>`;
+        botaoDesfazer.innerHTML = `
+          <svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/>
+          </svg>
+        `;
 
-        // Habilitar/desabilitar o botão de desfazer
-        botaoDesfazer.disabled = historicoDePontuacao[0].length === 0;
-
-        const handleDesfazer = () => {
-          if (historicoDePontuacao[0].length) {
+        botaoDesfazer.addEventListener('click', () => {
+          const valorAtual = parseInt(placar.textContent);
+          if (valorAtual > 0 && historicoDePontuacao[0].length > 1) {
             const ultimoPonto = historicoDePontuacao[0].pop();
-            placar.textContent = parseInt(placar.textContent) - ultimoPonto;
+            placar.textContent = valorAtual - ultimoPonto;
             atualizarEstadoDosBotoes(placar, botoes, botaoDesfazer);
           }
-        };
+        });
 
-        botaoDesfazer.addEventListener('click', handleDesfazer);
+        atualizarEstadoDosBotoes(placar, botoes, botaoDesfazer);
+
         return botaoDesfazer;
       };
 
-      // Funções de limpeza de input
       const sanitizeInput = input => input.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿçÇ0-9_\-\/\|\s.]/g, '');
       const limitLength = (input, maxLength = 30) => input.slice(0, maxLength);
 
-      // Função para tratar inputs e colagens
       const handleInput = inputElement => inputElement.value = limitLength(sanitizeInput(inputElement.value), 30);
       const handlePaste = (inputElement, event) => {
         event.preventDefault();
-        const pastedText = event.clipboardData.getData('text');
-        inputElement.value = limitLength(sanitizeInput(pastedText), 30);
+        inputElement.value = limitLength(sanitizeInput(event.clipboardData.getData('text')), 30);
       };
 
-      // Função para criar o cartão da dupla
       const criarCartaoParaCadaDupla = ({ classe }) => {
         const cartaoDupla = document.createElement('div');
         cartaoDupla.classList.add('cartao-dupla', classe);
@@ -308,10 +302,8 @@
         atualizarEstadoDosBotoes(placar, botoes, botaoDesfazer);
       };
 
-      // Criando os cartões para cada dupla
       duplasConfiguracoes.forEach(criarCartaoParaCadaDupla);
 
-      // Função que mantém a tela ativa e impede que o dispositivo entre em modo de hibernação.
       const manterTelaSempreAtivaSemDesligar = () => {
         let wakeLock = null;
 
