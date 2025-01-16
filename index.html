@@ -261,10 +261,15 @@
       const sanitizeInput = input => input.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿçÇ0-9_\-\/\|\s.]/g, '');
       const limitLength = (input, maxLength = 30) => input.slice(0, maxLength);
 
-      const handleInput = inputElement => inputElement.value = limitLength(sanitizeInput(inputElement.value), 30);
+      const handleInput = (inputElement) => {
+        inputElement.value = limitLength(sanitizeInput(inputElement.value), 30);
+        localStorage.setItem(inputElement.name, inputElement.value);
+      };
+
       const handlePaste = (inputElement, event) => {
         event.preventDefault();
         inputElement.value = limitLength(sanitizeInput(event.clipboardData.getData('text')), 30);
+        localStorage.setItem(inputElement.name, inputElement.value);
       };
 
       const criarCartaoParaCadaDupla = ({ classe }) => {
@@ -278,8 +283,14 @@
         const inputNomeEquipe = document.createElement('input');
         inputNomeEquipe.classList.add('input-nome-equipe');
         inputNomeEquipe.placeholder = 'Nome';
+        inputNomeEquipe.name = classe;
         inputNomeEquipe.addEventListener('input', () => handleInput(inputNomeEquipe));
         inputNomeEquipe.addEventListener('paste', event => handlePaste(inputNomeEquipe, event));
+
+        const nomeSalvo = localStorage.getItem(inputNomeEquipe.name);
+        if (nomeSalvo) {
+          inputNomeEquipe.value = nomeSalvo;
+        }
 
         const botoes = [];
         const botaoDesfazer = criarBotaoDesfazer(placar, botoes);
