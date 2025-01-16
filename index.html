@@ -357,6 +357,33 @@
          
          // Chama a função para manter a tela sempre ativa
          manterTelaSempreAtiva();
+           
+           // Função para salvar o conteúdo do nome da equipe no localStorage
+         const salvarNomeEquipe = (nome, equipe) => {
+         localStorage.setItem(equipe, nome);
+         };
+         
+         // Função para carregar o conteúdo salvo do nome da equipe
+         const carregarNomeEquipe = (equipe) => {
+         return localStorage.getItem(equipe) || '';  // Retorna o nome salvo ou uma string vazia se não houver
+         };
+         
+         // Selecionando as caixas de texto de nome de equipe
+         const inputNomeEquipe1 = document.querySelector('input[name="dupla-1"]');
+         const inputNomeEquipe2 = document.querySelector('input[name="dupla-2"]');
+         
+         // Carregando os nomes salvos ao carregar a página
+         inputNomeEquipe1.value = carregarNomeEquipe('dupla-1');
+         inputNomeEquipe2.value = carregarNomeEquipe('dupla-2');
+         
+         // Adicionando evento para salvar o nome sempre que o usuário mudar
+         inputNomeEquipe1.addEventListener('input', (event) => {
+         salvarNomeEquipe(event.target.value, 'dupla-1');
+         });
+         
+         inputNomeEquipe2.addEventListener('input', (event) => {
+         salvarNomeEquipe(event.target.value, 'dupla-2');
+         });
       </script>
    </body>
-</html>
+   </html>
