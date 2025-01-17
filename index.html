@@ -3,7 +3,7 @@
    <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-      <meta name="theme-color" content="#212121">
+      <meta name="theme-color" content="#424242">
       <link rel="manifest" href="/domino/manifest.json">
       <title>Placar Dominó</title>
       <script>
@@ -14,7 +14,7 @@
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
       <style>
          :root {
-         --cor-fundo: #212121;
+         --cor-fundo: #424242;
          --cor-placar: rgba(33,33,33,0.80);
          --cor-sombra: rgba(0, 0, 0, 0.2);
          --cor-botao: rgba(255, 255, 255, 0.80);
@@ -210,36 +210,28 @@
          </div>
       </div>
       <script>
-         // Função para validar os nomes das duplas (inclui acentuação, letras especiais e símbolos)
          const validarNome = (nome) => {
-             const regex = /^[A-Za-z0-9À-ÿ ./_-]*$/; // Aceita letras (acentuadas), números, espaço, ponto, barra, hífen e sublinhado
+             const regex = /^[A-Za-z0-9À-ÿ ./_-]*$/;
              return regex.test(nome);
          };
          
-         // Função para tratar o evento de input no campo de nome
          const tratarNomeInput = (evento) => {
              const nome = evento.target.value;
              if (!validarNome(nome)) {
-                 // Remove o último caractere não permitido
                  evento.target.value = nome.slice(0, -1);
              }
          };
          
-         // Selecionando as caixas de texto de nome
          const inputNomeDupla1 = document.querySelector('.dupla-1 .input-nome-equipe');
          const inputNomeDupla2 = document.querySelector('.dupla-2 .input-nome-equipe');
          
-         // Adicionando o evento de input nas caixas de texto
          inputNomeDupla1.addEventListener('input', tratarNomeInput);
          inputNomeDupla2.addEventListener('input', tratarNomeInput);
          
-         // Função pura para adicionar pontos ao placar
          const adicionarPontos = (placar, pontos) => placar + pontos;
          
-         // Função para verificar se o botão de pontos pode ser habilitado (não ultrapassando o limite)
          const podeHabilitarBotaoPontos = (placar, pontos, limite = 995) => placar + pontos <= limite;
          
-         // Função para desabilitar botões de pontos (caso ultrapassem o limite)
          const desabilitarBotoesPontos = (placar, botoes, limite = 995) => {
              botoes.forEach(botao => {
                  const pontos = parseInt(botao.dataset.pontos, 10);
@@ -247,26 +239,21 @@
              });
          };
          
-         // Função para verificar se o botão de desfazer deve ser desabilitado
          const desabilitarBotaoDesfazer = (placar, botaoDesfazer) => {
              botaoDesfazer.disabled = placar === 0;
          };
          
-         // Função para atualizar o placar, respeitando o limite
          const atualizarPlacar = (placar, pontos, limite = 995) => {
              const novoPlacar = adicionarPontos(placar, pontos);
-             return novoPlacar <= limite ? novoPlacar : placar; // Não deixa ultrapassar o limite
+             return novoPlacar <= limite ? novoPlacar : placar;
          };
          
-         // Inicializando o placar das duplas
          let placarDupla1 = 0;
          let placarDupla2 = 0;
          
-         // Histórico de pontos adicionados para desfazer
          const historicoPontosDupla1 = [];
          const historicoPontosDupla2 = [];
          
-         // Selecionando os botões e a tela de placar
          const botoesPontosDupla1 = document.querySelectorAll('.dupla-1 .botao-pontos');
          const botoesPontosDupla2 = document.querySelectorAll('.dupla-2 .botao-pontos');
          const botaoDesfazerDupla1 = document.querySelector('.dupla-1 .botao-desfazer');
@@ -274,35 +261,30 @@
          const placarElementDupla1 = document.querySelector('.dupla-1 .placar');
          const placarElementDupla2 = document.querySelector('.dupla-2 .placar');
          
-         // Função para atualizar a interface
          const atualizarInterface = () => {
              placarElementDupla1.textContent = placarDupla1;
              placarElementDupla2.textContent = placarDupla2;
          
-             // Desabilita os botões de pontos para cada dupla
              desabilitarBotoesPontos(placarDupla1, botoesPontosDupla1);
              desabilitarBotoesPontos(placarDupla2, botoesPontosDupla2);
          
-             // Desabilita os botões de desfazer
              desabilitarBotaoDesfazer(placarDupla1, botaoDesfazerDupla1);
              desabilitarBotaoDesfazer(placarDupla2, botaoDesfazerDupla2);
          };
          
-         // Função para desfazer a última ação
          const desfazerUltimaAcao = (placar, historico, placarElement) => {
              if (historico.length > 0) {
                  const ultimoPonto = historico.pop();
-                 placar -= ultimoPonto; // Remove o último ponto
+                 placar -= ultimoPonto;
                  placarElement.textContent = placar;
              }
              return placar;
          };
          
-         // Adicionando eventos de clique nos botões de pontos
          botoesPontosDupla1.forEach(botao => {
              botao.addEventListener('click', () => {
                  const pontos = parseInt(botao.dataset.pontos, 10);
-                 historicoPontosDupla1.push(pontos); // Armazena o valor no histórico
+                 historicoPontosDupla1.push(pontos);
                  placarDupla1 = atualizarPlacar(placarDupla1, pontos);
                  atualizarInterface();
              });
@@ -311,72 +293,57 @@
          botoesPontosDupla2.forEach(botao => {
              botao.addEventListener('click', () => {
                  const pontos = parseInt(botao.dataset.pontos, 10);
-                 historicoPontosDupla2.push(pontos); // Armazena o valor no histórico
+                 historicoPontosDupla2.push(pontos);
                  placarDupla2 = atualizarPlacar(placarDupla2, pontos);
                  atualizarInterface();
              });
          });
          
-         // Evento do botão desfazer para dupla 1
          botaoDesfazerDupla1.addEventListener('click', () => {
              placarDupla1 = desfazerUltimaAcao(placarDupla1, historicoPontosDupla1, placarElementDupla1);
              atualizarInterface();
          });
          
-         // Evento do botão desfazer para dupla 2
          botaoDesfazerDupla2.addEventListener('click', () => {
              placarDupla2 = desfazerUltimaAcao(placarDupla2, historicoPontosDupla2, placarElementDupla2);
              atualizarInterface();
          });
          
-         // Inicializa a interface
          atualizarInterface();
-           
-           
-           // Função para manter a tela sempre ativa e evitar que ela desligue automaticamente
+         
          const manterTelaSempreAtiva = () => {
          let wakeLock = null;
          
-         // Função para solicitar o Wake Lock e manter a tela ativa
          const solicitarWakeLock = async () => {
          wakeLock = await navigator.wakeLock.request('screen');
          wakeLock.addEventListener('release', () => wakeLock = null);
          };
          
-         // Quando a página é carregada, solicita o Wake Lock
          window.addEventListener('load', solicitarWakeLock);
          
-         // Quando a visibilidade da página muda, solicita o Wake Lock novamente se a página estiver visível
          document.addEventListener('visibilitychange', () => {
          if (document.visibilityState === 'visible') solicitarWakeLock();
          });
          
-         // Solicita o Wake Lock ao inicializar
          solicitarWakeLock();
          };
          
-         // Chama a função para manter a tela sempre ativa
          manterTelaSempreAtiva();
-           
-           // Função para salvar o conteúdo do nome da equipe no localStorage
+         
          const salvarNomeEquipe = (nome, equipe) => {
          localStorage.setItem(equipe, nome);
          };
          
-         // Função para carregar o conteúdo salvo do nome da equipe
          const carregarNomeEquipe = (equipe) => {
-         return localStorage.getItem(equipe) || '';  // Retorna o nome salvo ou uma string vazia se não houver
+         return localStorage.getItem(equipe) || '';
          };
          
-         // Selecionando as caixas de texto de nome de equipe
          const inputNomeEquipe1 = document.querySelector('input[name="dupla-1"]');
          const inputNomeEquipe2 = document.querySelector('input[name="dupla-2"]');
          
-         // Carregando os nomes salvos ao carregar a página
          inputNomeEquipe1.value = carregarNomeEquipe('dupla-1');
          inputNomeEquipe2.value = carregarNomeEquipe('dupla-2');
          
-         // Adicionando evento para salvar o nome sempre que o usuário mudar
          inputNomeEquipe1.addEventListener('input', (event) => {
          salvarNomeEquipe(event.target.value, 'dupla-1');
          });
@@ -386,4 +353,4 @@
          });
       </script>
    </body>
-   </html>
+</html>
