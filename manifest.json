@@ -18,12 +18,9 @@
       "type": "image/png"
     }
   ],
-  "screenshots": [
-    {
-      "src": "/domino/screenshot1.png",
-      "sizes": "720x1534",
-      "type": "image/png",
-      "label": "Tela de Placar"
-    }
-  ]
+  "categories": [
+    "games", 
+    "entertainment"
+  ],
+  "prefer_related_applications": false
 }
