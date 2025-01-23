@@ -1,12 +1,22 @@
 {
-  "name": "Placar-Dominó",
-  "short_name": "Placar",
-  "description": "Placar para jogo de Dominó. Adicione pontos tocando nos botões, use o botão de desfazer para corrigir erros e atualize a página para reiniciar os placares. Adicione o app à tela inicial e use offline sem problemas.",
-  "start_url": "/domino/index.html",
+  "dir": "ltr",
+  "lang": "pt-BR",
+  "name": "Placar Dominó",
   "display": "standalone",
-  "background_color": "#F5F5DC",
-  "theme_color": "#F5F5DC",
+  "start_url": "/domino/index.html",
+  "short_name": "Dominó",
+  "theme_color": "#424242",
+  "description": "Um aplicativo simples para acompanhar o placar das partidas de dominó.",
+  "orientation": "portrait",
+  "background_color": "#424242",
+  "prefer_related_applications": false,
   "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "icon.png",
       "sizes": "192x192",
@@ -14,13 +24,30 @@
     },
     {
       "src": "icon.png",
-      "sizes": "512x512",
+      "sizes": "120x120",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "60x60",
       "type": "image/png"
     }
   ],
-  "categories": [
-    "games", 
-    "entertainment"
+  "screenshots": [
+    {
+      "src": "/domino/screenshot1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "description": "Tela principal com placar das equipes"
+    },
   ],
-  "prefer_related_applications": false
+  "features": [
+    "Placar em tempo real",
+    "Interface simples e intuitiva",
+    "Suporte a múltiplas equipes"
+  ],
+  "categories": [
+    "games",
+    "utilities"
+  ]
 }
