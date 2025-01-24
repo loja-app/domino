@@ -20,10 +20,10 @@
   ],
   "screenshots": [
     {
-      "src": "/screen1.png",
+      "src": "/screenshot.png",
       "sizes": "1630x918",
       "type": "image/png",
-      "description": "PWABuilder Home Screen"
+      "description": "Tela inicial do aplicativo"
     }
   ],
   "features": [
