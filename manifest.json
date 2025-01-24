@@ -1,53 +1,38 @@
 {
   "dir": "ltr",
-  "lang": "pt-BR",
+  "lang": "pt",
   "name": "Placar Dominó",
   "display": "standalone",
   "start_url": "/domino/index.html",
-  "short_name": "Dominó",
+  "short_name": "Placar",
   "theme_color": "#424242",
-  "description": "Um aplicativo simples para acompanhar o placar das partidas de dominó.",
-  "orientation": "portrait",
+  "description": "Um aplicativo simples e funcional para registrar e gerenciar os placares das suas partidas de dominó.",
+  "orientation": "landscape",
   "background_color": "#424242",
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icon.png",
+      "src": "/icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
-    },
-    {
-      "src": "icon.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon.png",
-      "sizes": "120x120",
-      "type": "image/png"
-    },
-    {
-      "src": "icon.png",
-      "sizes": "60x60",
-      "type": "image/png"
     }
   ],
   "screenshots": [
     {
-      "src": "/domino/screenshot1.png",
-      "sizes": "1080x1920",
+      "src": "/screen1.png",
+      "sizes": "1630x918",
       "type": "image/png",
-      "description": "Tela principal com placar das equipes"
-    },
+      "description": "PWABuilder Home Screen"
+    }
   ],
   "features": [
-    "Placar em tempo real",
-    "Interface simples e intuitiva",
-    "Suporte a múltiplas equipes"
+    "Cross Platform",
+    "fast",
+    "simple"
   ],
+  "scope": "/domino/",
   "categories": [
-    "games",
-    "utilities"
+    "games"
   ]
 }
