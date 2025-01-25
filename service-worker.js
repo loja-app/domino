@@ -3,6 +3,8 @@ const urlsToCache = [
   "/domino/",
   "/domino/index.html",
   "/domino/icon.png",
+  "/domino/icon512_rounded.png",
+  "/domino/icon512_maskable.png",
   "https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap",
 ];
 
