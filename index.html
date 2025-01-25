@@ -122,16 +122,17 @@ button:focus {
    background:#ffd54f
 }
 .input-nome-equipe {
-   width:100%;
-   padding:var(--padding-input);
-   border:none;
-   border-bottom:2px solid var(--cor-placeholder);
-   background-color:transparent;
-   font-size:var(--font-size-input);
-   font-weight:550;
-   color:var(--cor-texto-input);
-   transition:border-color var(--transition);
-   line-height:2rem
+    width: 100%;
+    padding: var(--padding-input);
+    border: none;
+    border-bottom: 2px solid var(--cor-placeholder);
+    background-color: transparent;
+    font-size: var(--font-size-input);
+    font-weight: 800;
+    color: var(--cor-texto-input);
+    transition: border-color var(--transition);
+    line-height: 2rem;
+    letter-spacing: 0.05rem;
 }
 .input-nome-equipe:focus {
    outline:none;
@@ -165,8 +166,9 @@ button:focus {
 }
 </style></head><body><div class="container-principal"><div class="cartao-dupla dupla-1"><div class="container-nome-desfazer"><input class="input-nome-equipe" placeholder="Nome" name="dupla-1" /><button class="botao botao-desfazer"><svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z" /></svg></button></div><div class="placar">0</div><div class="container-botoes"><button class="botao botao-pontos" data-pontos="5">5</button><button class="botao botao-pontos" data-pontos="10">10</button><button class="botao botao-pontos" data-pontos="20">20</button><button class="botao botao-pontos" data-pontos="50">50</button></div></div><div class="cartao-dupla dupla-2"><div class="container-nome-desfazer"><input class="input-nome-equipe" placeholder="Nome" name="dupla-2" /><button class="botao botao-desfazer"><svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z" /></svg></button></div><div class="placar">0</div><div class="container-botoes"><button class="botao botao-pontos" data-pontos="5">5</button><button class="botao botao-pontos" data-pontos="10">10</button><button class="botao botao-pontos" data-pontos="20">20</button><button class="botao botao-pontos" data-pontos="50">50</button></div></div></div><script>const validarNome=(nome)=>/^[A-Za-z0-9À-ÿ ./_-]*$/.test(nome);
 const tratarNomeInput=(evento)=> {
-   const nome=evento.target.value;
-   if (!validarNome(nome)) evento.target.value=nome.slice(0,-1)
+   const nome=evento.target.value.toUpperCase();
+   if (!validarNome(nome)) evento.target.value=nome.slice(0,-1);
+   else evento.target.value=nome
 };
 const criarGerenciadorDupla=(seletor,equipe)=> {
    const dupla=document.querySelector(seletor);
