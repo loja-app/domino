@@ -1,58 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-      <meta name="theme-color" content="#424242">
-      <link rel="manifest" href="/domino/manifest.json">
-      <title>Placar Dominó</title>
-      <script>
-         window.addEventListener('load', () => {
-           navigator.serviceWorker.register('/domino/service-worker.js');
-         });
-      </script>
-      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-      <style>
-         :root {
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+   <meta name="theme-color" content="#424242">
+   <link rel="manifest" href="/domino/manifest.json">
+   <title>Placar Dominó</title>
+   <script>
+      window.addEventListener('load', () => {
+         navigator.serviceWorker.register('/domino/service-worker.js');
+      });
+   </script>
+   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+   <style>
+      :root {
          --cor-fundo: #424242;
-         --cor-placar: rgba(33,33,33,0.80);
-         --cor-sombra: rgba(0, 0, 0, 0.2);
-         --cor-botao: rgba(255, 255, 255, 0.75);
-         --cor-botao-clicado: rgba(208, 208, 208, 0.70);
+         --cor-placar: rgba(20, 20, 20, 0.85);
+         --cor-sombra: rgba(0, 0, 0, 0.25);
+         --cor-botao: rgba(255, 255, 255, 0.85);
+         --cor-botao-clicado: rgba(200, 200, 200, 0.75);
          --cor-botao-desfazer: rgba(255, 255, 255, 0.80);
          --cor-input: rgba(255, 255, 255, 0.70);
          --cor-input-foco: rgb(62, 39, 35);
          --cor-texto-input: rgba(0, 0, 0, 0.80);
-         --cor-placeholder: rgba(0, 0, 0, 0.45);
+         --cor-placeholder: rgba(60, 60, 60, 0.6);
          --font-size-placar: 8em;
-         --font-size-botao: 1.5rem;
-         --font-size-input: 1.1rem;
+         --font-size-botao: 1.4rem;
+         --font-size-input: 1.2rem;
          --padding-botao: 0.875rem;
          --padding-input: 0.675rem;
          --border-radius: 0.625rem;
-         --box-shadow: 0 0.355rem 0.55rem rgba(0, 0, 0, 0.2);
-         --transition: 0.2s;
-         }
-         * {
+         --box-shadow: 0 0.4rem 0.6rem var(--cor-sombra);
+         --transition: 0.3s;
+      }
+      * {
          margin: 0;
          padding: 0;
          box-sizing: border-box;
-         }
-         html, body {
+      }
+      html, body {
          width: 100%;
          height: 100%;
          background: var(--cor-fundo);
          font-family: 'Roboto', sans-serif;
          user-select: none;
-         }
-         .container-principal {
+      }
+      .container-principal {
          display: flex;
          flex-direction: column;
          height: 100%;
          padding: 0.525rem;
          gap: 0.525rem;
-         }
-         .cartao-dupla {
+      }
+      .cartao-dupla {
          display: flex;
          flex-direction: column;
          justify-content: center;
@@ -62,8 +62,8 @@
          box-shadow: var(--box-shadow);
          flex: 1;
          gap: 0;
-         }
-         .placar {
+      }
+      .placar {
          font-size: var(--font-size-placar);
          font-weight: 600;
          color: var(--cor-placar);
@@ -75,14 +75,14 @@
          align-items: center;
          justify-content: center;
          margin-top: -0.1rem;
-         }
-         .container-botoes {
+      }
+      .container-botoes {
          display: flex;
          justify-content: space-between;
          gap: 0.5rem;
          width: 100%;
-         }
-         .botao {
+      }
+      .botao {
          flex: 1;
          padding: var(--padding-botao);
          border: none;
@@ -95,40 +95,40 @@
          transition: background-color var(--transition), transform var(--transition);
          -webkit-tap-highlight-color: transparent;
          background-color: var(--cor-botao);
-         }
-         .botao:active {
+      }
+      .botao:active {
          background-color: var(--cor-botao-clicado);
          transform: scale(0.95);
-         }
-         .botao-pontos {
+      }
+      .botao-pontos {
          font-size: var(--font-size-botao);
-         }
-         .botao-desfazer {
+      }
+      .botao-desfazer {
          background-color: var(--cor-botao-desfazer);
          font-size: var(--font-size-botao);
-         }
-         .botao-desfazer svg {
+      }
+      .botao-desfazer svg {
          width: 1.3rem;
          height: 1.3rem;
          display: block;
          margin: 0 auto;
          pointer-events: none;
-         }
-         button:focus {
+      }
+      button:focus {
          outline: none;
-         }
-         @media (orientation: landscape) {
+      }
+      @media (orientation: landscape) {
          .container-principal {
-         flex-direction: row;
+            flex-direction: row;
          }
-         }
-         .dupla-1 {
+      }
+      .dupla-1 {
          background: #AED581;
-         }
-         .dupla-2 {
+      }
+      .dupla-2 {
          background: #FFD54F;
-         }
-         .input-nome-equipe {
+      }
+      .input-nome-equipe {
          width: 100%;
          padding: var(--padding-input);
          border: none;
@@ -139,218 +139,139 @@
          color: var(--cor-texto-input);
          transition: border-color var(--transition);
          line-height: 2rem;
-         }
-         .input-nome-equipe:focus {
+      }
+      .input-nome-equipe:focus {
          outline: none;
          border-bottom: 2px solid var(--cor-input-foco);
-         }
-         .input-nome-equipe:not(:placeholder-shown) {
+      }
+      .input-nome-equipe:not(:placeholder-shown) {
          border-bottom: 2px solid var(--cor-input-foco);
-         }
-         .input-nome-equipe::placeholder {
+      }
+      .input-nome-equipe::placeholder {
          color: var(--cor-placeholder);
          font-size: var(--font-size-input);
-         }
-         .container-nome-desfazer {
+      }
+      .container-nome-desfazer {
          display: flex;
          align-items: center;
          justify-content: space-between;
          width: 100%;
          gap: 0.5rem;
-         }
-         .container-pontos {
+      }
+      .container-pontos {
          display: flex;
          justify-content: center;
          width: 100%;
-         }
-         .botao:disabled {
+      }
+      .botao:disabled {
          cursor: not-allowed;
          opacity: 0.5;
          transform: none;
          pointer-events: none;
          transition: none;
-         }
-      </style>
-   </head>
-   <body>
-      <div class="container-principal">
-         <div class="cartao-dupla dupla-1">
-            <div class="container-nome-desfazer">
-               <input class="input-nome-equipe" placeholder="Nome" name="dupla-1" />
-               <button class="botao botao-desfazer">
-                  <svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                     <path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/>
-                  </svg>
-               </button>
-            </div>
-            <div class="placar">0</div>
-            <div class="container-botoes">
-               <button class="botao botao-pontos" data-pontos="5">5</button>
-               <button class="botao botao-pontos" data-pontos="10">10</button>
-               <button class="botao botao-pontos" data-pontos="20">20</button>
-               <button class="botao botao-pontos" data-pontos="50">50</button>
-            </div>
+      }
+   </style>
+</head>
+<body>
+   <div class="container-principal">
+      <div class="cartao-dupla dupla-1">
+         <div class="container-nome-desfazer">
+            <input class="input-nome-equipe" placeholder="Nome" name="dupla-1" />
+            <button class="botao botao-desfazer">
+               <svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/>
+               </svg>
+            </button>
          </div>
-         <div class="cartao-dupla dupla-2">
-            <div class="container-nome-desfazer">
-               <input class="input-nome-equipe" placeholder="Nome" name="dupla-2" />
-               <button class="botao botao-desfazer">
-                  <svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                     <path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/>
-                  </svg>
-               </button>
-            </div>
-            <div class="placar">0</div>
-            <div class="container-botoes">
-               <button class="botao botao-pontos" data-pontos="5">5</button>
-               <button class="botao botao-pontos" data-pontos="10">10</button>
-               <button class="botao botao-pontos" data-pontos="20">20</button>
-               <button class="botao botao-pontos" data-pontos="50">50</button>
-            </div>
+         <div class="placar">0</div>
+         <div class="container-botoes">
+            <button class="botao botao-pontos" data-pontos="5">5</button>
+            <button class="botao botao-pontos" data-pontos="10">10</button>
+            <button class="botao botao-pontos" data-pontos="20">20</button>
+            <button class="botao botao-pontos" data-pontos="50">50</button>
          </div>
       </div>
-      <script>
-         const validarNome = (nome) => {
-             const regex = /^[A-Za-z0-9À-ÿ ./_-]*$/;
-             return regex.test(nome);
-         };
-         
-         const tratarNomeInput = (evento) => {
-             const nome = evento.target.value;
-             if (!validarNome(nome)) {
-                 evento.target.value = nome.slice(0, -1);
-             }
-         };
-         
-         const inputNomeDupla1 = document.querySelector('.dupla-1 .input-nome-equipe');
-         const inputNomeDupla2 = document.querySelector('.dupla-2 .input-nome-equipe');
-         
-         inputNomeDupla1.addEventListener('input', tratarNomeInput);
-         inputNomeDupla2.addEventListener('input', tratarNomeInput);
-         
-         const adicionarPontos = (placar, pontos) => placar + pontos;
-         
-         const podeHabilitarBotaoPontos = (placar, pontos, limite = 995) => placar + pontos <= limite;
-         
-         const desabilitarBotoesPontos = (placar, botoes, limite = 995) => {
-             botoes.forEach(botao => {
-                 const pontos = parseInt(botao.dataset.pontos, 10);
-                 botao.disabled = !podeHabilitarBotaoPontos(placar, pontos, limite);
-             });
-         };
-         
-         const desabilitarBotaoDesfazer = (placar, botaoDesfazer) => {
-             botaoDesfazer.disabled = placar === 0;
-         };
-         
-         const atualizarPlacar = (placar, pontos, limite = 995) => {
-             const novoPlacar = adicionarPontos(placar, pontos);
-             return novoPlacar <= limite ? novoPlacar : placar;
-         };
-         
-         let placarDupla1 = 0;
-         let placarDupla2 = 0;
-         
-         const historicoPontosDupla1 = [];
-         const historicoPontosDupla2 = [];
-         
-         const botoesPontosDupla1 = document.querySelectorAll('.dupla-1 .botao-pontos');
-         const botoesPontosDupla2 = document.querySelectorAll('.dupla-2 .botao-pontos');
-         const botaoDesfazerDupla1 = document.querySelector('.dupla-1 .botao-desfazer');
-         const botaoDesfazerDupla2 = document.querySelector('.dupla-2 .botao-desfazer');
-         const placarElementDupla1 = document.querySelector('.dupla-1 .placar');
-         const placarElementDupla2 = document.querySelector('.dupla-2 .placar');
-         
+      <div class="cartao-dupla dupla-2">
+         <div class="container-nome-desfazer">
+            <input class="input-nome-equipe" placeholder="Nome" name="dupla-2" />
+            <button class="botao botao-desfazer">
+               <svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/>
+               </svg>
+            </button>
+         </div>
+         <div class="placar">0</div>
+         <div class="container-botoes">
+            <button class="botao botao-pontos" data-pontos="5">5</button>
+            <button class="botao botao-pontos" data-pontos="10">10</button>
+            <button class="botao botao-pontos" data-pontos="20">20</button>
+            <button class="botao botao-pontos" data-pontos="50">50</button>
+         </div>
+      </div>
+   </div>
+   <script>
+      const validarNome = (nome) => /^[A-Za-z0-9À-ÿ ./_-]*$/.test(nome);
+      const tratarNomeInput = (evento) => {
+         const nome = evento.target.value;
+         if (!validarNome(nome)) evento.target.value = nome.slice(0, -1);
+      };
+      const criarGerenciadorDupla = (seletor, equipe) => {
+         const dupla = document.querySelector(seletor);
+         const inputNome = dupla.querySelector('.input-nome-equipe');
+         const botoesPontos = dupla.querySelectorAll('.botao-pontos');
+         const botaoDesfazer = dupla.querySelector('.botao-desfazer');
+         const placarElement = dupla.querySelector('.placar');
+         let placar = 0;
+         const historicoPontos = [];
+         inputNome.value = carregarNomeEquipe(equipe);
+         inputNome.addEventListener('input', (event) => {
+            tratarNomeInput(event);
+            salvarNomeEquipe(event.target.value, equipe);
+         });
          const atualizarInterface = () => {
-             placarElementDupla1.textContent = placarDupla1;
-             placarElementDupla2.textContent = placarDupla2;
-         
-             desabilitarBotoesPontos(placarDupla1, botoesPontosDupla1);
-             desabilitarBotoesPontos(placarDupla2, botoesPontosDupla2);
-         
-             desabilitarBotaoDesfazer(placarDupla1, botaoDesfazerDupla1);
-             desabilitarBotaoDesfazer(placarDupla2, botaoDesfazerDupla2);
+            placarElement.textContent = placar;
+            botoesPontos.forEach((botao) => {
+               const pontos = parseInt(botao.dataset.pontos, 10);
+               botao.disabled = placar + pontos > 995;
+            });
+            botaoDesfazer.disabled = placar === 0;
          };
-         
-         const desfazerUltimaAcao = (placar, historico, placarElement) => {
-             if (historico.length > 0) {
-                 const ultimoPonto = historico.pop();
-                 placar -= ultimoPonto;
-                 placarElement.textContent = placar;
-             }
-             return placar;
+         const adicionarPontos = (pontos) => {
+            if (placar + pontos <= 995) {
+               historicoPontos.push(pontos);
+               placar += pontos;
+               atualizarInterface();
+            }
          };
-         
-         botoesPontosDupla1.forEach(botao => {
-             botao.addEventListener('click', () => {
-                 const pontos = parseInt(botao.dataset.pontos, 10);
-                 historicoPontosDupla1.push(pontos);
-                 placarDupla1 = atualizarPlacar(placarDupla1, pontos);
-                 atualizarInterface();
-             });
+         const desfazerUltimaAcao = () => {
+            if (historicoPontos.length > 0) {
+               placar -= historicoPontos.pop();
+               atualizarInterface();
+            }
+         };
+         botoesPontos.forEach((botao) => {
+            botao.addEventListener('click', () => adicionarPontos(parseInt(botao.dataset.pontos, 10)));
          });
-         
-         botoesPontosDupla2.forEach(botao => {
-             botao.addEventListener('click', () => {
-                 const pontos = parseInt(botao.dataset.pontos, 10);
-                 historicoPontosDupla2.push(pontos);
-                 placarDupla2 = atualizarPlacar(placarDupla2, pontos);
-                 atualizarInterface();
-             });
-         });
-         
-         botaoDesfazerDupla1.addEventListener('click', () => {
-             placarDupla1 = desfazerUltimaAcao(placarDupla1, historicoPontosDupla1, placarElementDupla1);
-             atualizarInterface();
-         });
-         
-         botaoDesfazerDupla2.addEventListener('click', () => {
-             placarDupla2 = desfazerUltimaAcao(placarDupla2, historicoPontosDupla2, placarElementDupla2);
-             atualizarInterface();
-         });
-         
+         botaoDesfazer.addEventListener('click', desfazerUltimaAcao);
          atualizarInterface();
-         
-         const manterTelaSempreAtiva = () => {
+      };
+      const salvarNomeEquipe = (nome, equipe) => localStorage.setItem(equipe, nome);
+      const carregarNomeEquipe = (equipe) => localStorage.getItem(equipe) || '';
+      criarGerenciadorDupla('.dupla-1', 'dupla-1');
+      criarGerenciadorDupla('.dupla-2', 'dupla-2');
+      const manterTelaSempreAtiva = () => {
          let wakeLock = null;
-         
          const solicitarWakeLock = async () => {
-         wakeLock = await navigator.wakeLock.request('screen');
-         wakeLock.addEventListener('release', () => wakeLock = null);
+            wakeLock = await navigator.wakeLock.request('screen');
+            wakeLock.addEventListener('release', () => (wakeLock = null));
          };
-         
          window.addEventListener('load', solicitarWakeLock);
-         
          document.addEventListener('visibilitychange', () => {
-         if (document.visibilityState === 'visible') solicitarWakeLock();
+            if (document.visibilityState === 'visible') solicitarWakeLock();
          });
-         
          solicitarWakeLock();
-         };
-         
-         manterTelaSempreAtiva();
-         
-         const salvarNomeEquipe = (nome, equipe) => {
-         localStorage.setItem(equipe, nome);
-         };
-         
-         const carregarNomeEquipe = (equipe) => {
-         return localStorage.getItem(equipe) || '';
-         };
-         
-         const inputNomeEquipe1 = document.querySelector('input[name="dupla-1"]');
-         const inputNomeEquipe2 = document.querySelector('input[name="dupla-2"]');
-         
-         inputNomeEquipe1.value = carregarNomeEquipe('dupla-1');
-         inputNomeEquipe2.value = carregarNomeEquipe('dupla-2');
-         
-         inputNomeEquipe1.addEventListener('input', (event) => {
-         salvarNomeEquipe(event.target.value, 'dupla-1');
-         });
-         
-         inputNomeEquipe2.addEventListener('input', (event) => {
-         salvarNomeEquipe(event.target.value, 'dupla-2');
-         });
-      </script>
-   </body>
-   </html>
+      };
+      manterTelaSempreAtiva();
+   </script>
+</body>
+</html>
