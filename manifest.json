@@ -1,38 +1,27 @@
 {
-  "dir": "ltr",
-  "lang": "pt",
-  "name": "Placar Dominó",
-  "display": "standalone",
-  "start_url": "/domino/index.html",
-  "short_name": "Placar",
-  "theme_color": "#424242",
-  "description": "Um aplicativo simples e funcional para registrar e gerenciar os placares das suas partidas de dominó.",
-  "orientation": "landscape",
-  "background_color": "#424242",
-  "prefer_related_applications": false,
+  "theme_color": "#333333",
+  "background_color": "#333333",
   "icons": [
     {
-      "src": "/icon.png",
+      "purpose": "maskable",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    }
-  ],
-  "screenshots": [
+      "src": "icon512_maskable.png",
+      "type": "image/png"
+    },
     {
-      "src": "/screenshot.png",
-      "sizes": "1630x918",
-      "type": "image/png",
-      "description": "Tela inicial do aplicativo"
+      "purpose": "any",
+      "sizes": "512x512",
+      "src": "icon512_rounded.png",
+      "type": "image/png"
     }
   ],
-  "features": [
-    "Cross Platform",
-    "fast",
-    "simple"
-  ],
+  "orientation": "any",
+  "display": "standalone",
+  "dir": "auto",
+  "lang": "pt-BR",
+  "name": "Placar Dominó",
+  "short_name": "Placar",
   "scope": "/domino/",
-  "categories": [
-    "games"
-  ]
+  "start_url": "/domino/index.html",
+  "description": "Um aplicativo simples e funcional para registrar e gerenciar os placares das suas partidas de dominó."
 }
