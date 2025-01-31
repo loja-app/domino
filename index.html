@@ -27,6 +27,12 @@
         manterTelaSempreAtiva();
 
         document.addEventListener("contextmenu", (evento) => evento.preventDefault());
+
+        document.addEventListener("dblclick", (evento) => {
+            if (evento.target.classList.contains("placar")) {
+                evento.preventDefault();
+            }
+        });
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
     <style>
@@ -166,6 +172,10 @@
 
         .dupla-2 {
             background: #EF9A9A;
+        }
+
+        input, textarea {
+            user-select: text;
         }
 
         .input-nome-equipe {
