@@ -6,68 +6,40 @@
   <meta name="theme-color" content="#212121">
   <link rel="manifest" href="/domino/manifest.json">
   <title>Placar Dominó</title>
-
-  <script>
-    function registrarServiceWorker() {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("/domino/service-worker.js");
-      });
-    }
-
-    registrarServiceWorker();
-
-    function ativarWakeLock() {
-      navigator.wakeLock.request("screen");
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "visible") navigator.wakeLock.request("screen");
-      });
-    }
-
-    ativarWakeLock();
-  </script>
-
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
   <style>
     :root {
-      --cor-fundo: #212121;
-      --cor-placar: rgba(20, 20, 20, 0.9);
-      --cor-sombra: rgba(0, 0, 0, 0.25);
-      --cor-botao: rgba(255, 255, 255, 0.7);
-      --cor-botao-clicado: rgba(200, 200, 200, 0.6);
-      --cor-botao-desfazer: rgba(255, 255, 255, 0.7);
-      --cor-input: rgba(255, 255, 255, 0.8);
-      --cor-input-foco: rgb(62, 39, 35);
-      --cor-texto-input: rgb(0, 0, 0);
-      --cor-placeholder: rgba(60, 60, 60, 0.9);
-      --font-size-placar: 8em;
-      --font-size-botao: 1.2rem;
-      --font-size-input: 1.2rem;
-      --padding-botao: 0.875rem;
-      --padding-input: 0.675rem;
-      --border-radius: 0.625rem;
-      --box-shadow: 0 0.4rem 0.6rem var(--cor-sombra);
-      --transition: 0.3s;
+      --fundo: #212121;
+      --placar-cor: rgba(20,20,20,0.9);
+      --sombra: rgba(0,0,0,0.25);
+      --botao-cor: rgba(255,255,255,0.7);
+      --botao-ativo: rgba(200,200,200,0.6);
+      --desfazer-cor: rgba(255,255,255,0.7);
+      --input-cor: rgba(255,255,255,0.8);
+      --input-foco: rgb(62,39,35);
+      --texto-input: rgb(0,0,0);
+      --placeholder: rgba(60,60,60,0.9);
+      --tamanho-placar: 8em;
+      --tamanho-botao: 1.2rem;
+      --tamanho-input: 1.2rem;
+      --espaco-botao: 0.875rem;
+      --espaco-input: 0.675rem;
+      --raio-borda: 0.625rem;
+      --transicao: 0.3s;
     }
-
-    * {
+    *, *::before, *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       user-select: none;
     }
-
     html, body {
       width: 100%;
       height: 100%;
-      background: var(--cor-fundo);
-      font-family: "Roboto", sans-serif;
+      background: var(--fundo);
+      font-family: 'Roboto', sans-serif;
     }
-
-    input, textarea {
-      user-select: text;
-    }
-
+    input, textarea { user-select: text; }
     .container-principal {
       display: flex;
       flex-direction: column;
@@ -75,70 +47,95 @@
       padding: 0.525rem;
       gap: 0.525rem;
     }
-
+    @media (orientation: landscape) {
+      .container-principal { flex-direction: row; }
+    }
     .cartao-dupla {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
       padding: 1.25rem;
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
-      flex: 1;
-      gap: 0;
+      border-radius: var(--raio-borda);
+      box-shadow: 0 0.4rem 0.6rem var(--sombra);
+      align-items: center;
+      justify-content: center;
     }
-
+    .dupla-1 { background: #90CAF9; }
+    .dupla-2 { background: #EF9A9A; }
+    .container-nome-desfazer {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .input-nome-equipe {
+      width: 100%;
+      padding: var(--espaco-input);
+      border: none;
+      border-bottom: 1px solid var(--placeholder);
+      background: transparent;
+      font-size: var(--tamanho-input);
+      font-weight: 800;
+      color: var(--texto-input);
+      transition: border-color var(--transicao);
+      line-height: 2rem;
+      letter-spacing: 0.05rem;
+    }
+    .input-nome-equipe:focus,
+    .input-nome-equipe:not(:placeholder-shown) {
+      border-bottom: 2px solid var(--input-foco);
+      outline: none;
+    }
+    .input-nome-equipe::placeholder {
+      color: var(--placeholder);
+      font-size: var(--tamanho-input);
+    }
     .placar {
-      font-size: var(--font-size-placar);
-      font-weight: 600;
-      color: var(--cor-placar);
-      text-align: center;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.24), 0 4px 8px rgba(0, 0, 0, 0.12);
       width: 100%;
       flex-grow: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: var(--tamanho-placar);
+      font-weight: 600;
+      color: var(--placar-cor);
+      text-align: center;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.24), 0 4px 8px rgba(0,0,0,0.12);
     }
-
     .container-botoes {
+      width: 100%;
       display: flex;
       justify-content: space-between;
       gap: 0.5rem;
-      width: 100%;
     }
-
     .botao {
       flex: 1;
-      padding: var(--padding-botao);
+      padding: var(--espaco-botao);
       border: none;
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
-      font-size: var(--font-size-botao);
+      border-radius: var(--raio-borda);
+      box-shadow: 0 0.4rem 0.6rem var(--sombra);
+      font-size: var(--tamanho-botao);
       font-weight: 500;
       text-align: center;
       cursor: pointer;
-      transition: background-color var(--transition), transform var(--transition);
+      transition: background-color var(--transicao), transform var(--transicao);
+      background: var(--botao-cor);
       -webkit-tap-highlight-color: transparent;
-      background-color: var(--cor-botao);
     }
-
     .botao:active {
-      background-color: var(--cor-botao-clicado);
+      background: var(--botao-ativo);
       transform: scale(0.95);
     }
-
     .botao-pontos {
       font-size: 2rem;
       line-height: 1;
-      padding: var(--padding-botao);
+      padding: var(--espaco-botao);
     }
-
     .botao-desfazer {
-      background-color: var(--cor-botao-desfazer);
-      font-size: var(--font-size-botao);
+      background: var(--desfazer-cor);
+      font-size: var(--tamanho-botao);
     }
-
     .botao-desfazer svg {
       width: 1.6rem;
       height: 1.6rem;
@@ -146,193 +143,145 @@
       margin: 0 auto;
       pointer-events: none;
     }
-
-    button:focus {
-      outline: none;
-    }
-
-    @media (orientation: landscape) {
-      .container-principal {
-        flex-direction: row;
-      }
-    }
-
-    .dupla-1 {
-      background: #90CAF9;
-    }
-
-    .dupla-2 {
-      background: #EF9A9A;
-    }
-
-    .input-nome-equipe {
-      width: 100%;
-      padding: var(--padding-input);
-      border: none;
-      border-bottom: 1px solid var(--cor-placeholder);
-      background-color: transparent;
-      font-size: var(--font-size-input);
-      font-weight: 800;
-      color: var(--cor-texto-input);
-      transition: border-color var(--transition);
-      line-height: 2rem;
-      letter-spacing: 0.05rem;
-    }
-
-    .input-nome-equipe:focus,
-    .input-nome-equipe:not(:placeholder-shown) {
-      border-bottom: 2px solid var(--cor-input-foco);
-      outline: none;
-    }
-
-    .input-nome-equipe::placeholder {
-      color: var(--cor-placeholder);
-      font-size: var(--font-size-input);
-    }
-
-    .container-nome-desfazer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      gap: 0.5rem;
-    }
-
+    button:focus { outline: none; }
     .botao:disabled {
       cursor: not-allowed;
       opacity: 0.5;
-      transform: none;
       pointer-events: none;
+      transform: none;
       transition: none;
     }
   </style>
 </head>
-
 <body>
   <div class="container-principal" id="container-principal"></div>
-
   <script>
-    const tratarNomeInput = evento => {
-      let valor = evento.target.value.toUpperCase();
-      valor = valor.replace(/[^\p{Lu}\s]/gu, "");
-      evento.target.value = valor;
-    };
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/domino/service-worker.js');
+      init();
+    });
 
-    const salvarNomeEquipe = (nome, equipe) => localStorage.setItem(equipe, nome);
-    const carregarNomeEquipe = equipe => localStorage.getItem(equipe) || "";
+    async function ativarWakeLock() {
+      try {
+        await navigator.wakeLock.request('screen');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') ativarWakeLock();
+    });
+
+    const salvarNome = (time, nome) => localStorage.setItem(time, nome);
+    const carregarNome = time => localStorage.getItem(time) || '';
+
+    const limparInput = e => {
+      e.target.value = e.target.value.toUpperCase().replace(/[^\p{Lu}\s]/gu, '');
+    };
 
     const criarBotaoPontos = pontos => {
-      const botaoPontos = document.createElement("button");
-      botaoPontos.classList.add("botao", "botao-pontos");
-      botaoPontos.dataset.pontos = pontos;
-      botaoPontos.textContent = pontos;
-      return botaoPontos;
+      const btn = document.createElement('button');
+      btn.className = 'botao botao-pontos';
+      btn.dataset.pontos = pontos;
+      btn.textContent = pontos;
+      return btn;
     };
 
-    const criarGerenciadorDupla = (seletor, equipe) => {
-      const dupla = document.querySelector(seletor);
-      const inputNome = dupla.querySelector(".input-nome-equipe");
-      const botoesPontos = dupla.querySelectorAll(".botao-pontos");
-      const botaoDesfazer = dupla.querySelector(".botao-desfazer");
-      const placarElement = dupla.querySelector(".placar");
-
+    const gerenciarDupla = (seletor, time) => {
+      const card = document.querySelector(seletor);
+      const input = card.querySelector('.input-nome-equipe');
+      const placarEl = card.querySelector('.placar');
+      const botoesPontos = card.querySelectorAll('.botao-pontos');
+      const btnDesfazer = card.querySelector('.botao-desfazer');
       let placar = 0;
-      const historicoPontos = [];
+      const historico = [];
 
-      inputNome.value = carregarNomeEquipe(equipe);
-      inputNome.addEventListener("input", tratarNomeInput);
-      inputNome.addEventListener("blur", evento => salvarNomeEquipe(evento.target.value, equipe));
+      input.value = carregarNome(time);
+      input.addEventListener('input', limparInput);
+      input.addEventListener('blur', e => salvarNome(time, e.target.value));
 
-      const atualizarInterface = () => {
-        placarElement.textContent = placar;
-        botoesPontos.forEach(botao => {
-          const pontos = parseInt(botao.dataset.pontos, 10);
-          botao.disabled = placar + pontos > 995;
+      const atualizarUI = () => {
+        placarEl.textContent = placar;
+        botoesPontos.forEach(btn => {
+          const pts = parseInt(btn.dataset.pontos, 10);
+          btn.disabled = placar + pts > 995;
         });
-        botaoDesfazer.disabled = placar === 0;
+        btnDesfazer.disabled = placar === 0;
       };
 
-      const adicionarPontos = pontos => {
-        if (placar + pontos <= 995) {
-          historicoPontos.push(pontos);
-          placar += pontos;
-          atualizarInterface();
+      const somarPontos = pts => {
+        if (placar + pts <= 995) {
+          historico.push(pts);
+          placar += pts;
+          atualizarUI();
         }
       };
 
-      const desfazerUltimaAcao = () => {
-        if (historicoPontos.length > 0) {
-          placar -= historicoPontos.pop();
-          atualizarInterface();
+      const desfazer = () => {
+        if (historico.length) {
+          placar -= historico.pop();
+          atualizarUI();
         }
       };
 
-      botoesPontos.forEach(botao => {
-        botao.addEventListener("click", () => adicionarPontos(parseInt(botao.dataset.pontos, 10)));
-      });
-
-      botaoDesfazer.addEventListener("click", desfazerUltimaAcao);
-
-      placarElement.addEventListener("mousedown", evento => {
-        if (document.activeElement && document.activeElement.classList.contains("input-nome-equipe")) {
+      botoesPontos.forEach(btn =>
+        btn.addEventListener('click', () =>
+          somarPontos(parseInt(btn.dataset.pontos, 10))
+        )
+      );
+      btnDesfazer.addEventListener('click', desfazer);
+      placarEl.addEventListener('mousedown', e => {
+        if (document.activeElement?.classList.contains('input-nome-equipe'))
           document.activeElement.blur();
-        }
-        evento.preventDefault();
+        e.preventDefault();
       });
-
-      atualizarInterface();
+      atualizarUI();
     };
 
-    const criarCardDupla = (classe, nomeEquipe) => {
-      const card = document.createElement("div");
-      card.classList.add("cartao-dupla", classe);
+    const criarCartaoDupla = (classe, time) => {
+      const cartao = document.createElement('div');
+      cartao.className = `cartao-dupla ${classe}`;
 
-      const containerNomeDesfazer = document.createElement("div");
-      containerNomeDesfazer.classList.add("container-nome-desfazer");
+      const containerND = document.createElement('div');
+      containerND.className = 'container-nome-desfazer';
 
-      const inputNome = document.createElement("input");
-      inputNome.classList.add("input-nome-equipe");
-      inputNome.placeholder = "Nome";
-      inputNome.value = carregarNomeEquipe(nomeEquipe);
+      const inputNome = document.createElement('input');
+      inputNome.className = 'input-nome-equipe';
+      inputNome.placeholder = 'Nome';
+      inputNome.value = carregarNome(time);
 
-      const botaoDesfazer = document.createElement("button");
-      botaoDesfazer.classList.add("botao", "botao-desfazer");
-      botaoDesfazer.innerHTML = '<svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9,16 C9.85216986,16 10.2974338,15.0144864 9.78322518,14.3774732 L9.70710678,14.2928932 L7.41602684,12.0006549 C8.6852851,10.797551 10.6983085,10 13,10 C16.918278,10 20,12.3112915 20,15 C20,15.5522847 20.4477153,16 21,16 C21.5522847,16 22,15.5522847 22,15 C22,11.0612915 17.918278,8 13,8 C10.1933072,8 7.65904665,8.99693838 6.00030879,10.5849581 L3.70710678,8.29289322 C3.1045317,7.69031813 2.09281919,8.07233231 2.00598327,8.88636906 L2,9 L2,15 C2,15.5128358 2.38604019,15.9355072 2.88337887,15.9932723 L3,16 L9,16 Z"/></svg>';
+      const btnDesfazer = document.createElement('button');
+      btnDesfazer.className = 'botao botao-desfazer';
+      btnDesfazer.innerHTML = `<svg fill="#000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9,16 C9.85217,16 10.29743,15.01449 9.78323,14.37747 L9.70711,14.29289 L7.41603,12.00065 C8.68529,10.79755 10.69831,10 13,10 C16.91828,10 20,12.31129 20,15 C20,15.55228 20.44772,16 21,16 C21.55228,16 22,15.55228 22,15 C22,11.06129 17.91828,8 13,8 C10.19331,8 7.65905,8.99694 6.00031,10.58496 L3.70711,8.29289 C3.10453,7.69032 2.09282,8.07233 2.00598,8.88637 L2,9 L2,15 C2,15.51284 2.38604,15.93551 2.88338,15.99327 L3,16 L9,16 Z"/>
+        </svg>`;
 
-      containerNomeDesfazer.appendChild(inputNome);
-      containerNomeDesfazer.appendChild(botaoDesfazer);
-      card.appendChild(containerNomeDesfazer);
+      containerND.append(inputNome, btnDesfazer);
+      cartao.append(containerND);
 
-      const placarElement = document.createElement("div");
-      placarElement.classList.add("placar");
-      placarElement.textContent = "0";
+      const placar = document.createElement('div');
+      placar.className = 'placar';
+      placar.textContent = '0';
+      cartao.append(placar);
 
-      const containerBotoes = document.createElement("div");
-      containerBotoes.classList.add("container-botoes");
-      [5, 10, 20, 50].forEach(pontos => {
-        const botaoPontos = criarBotaoPontos(pontos);
-        containerBotoes.appendChild(botaoPontos);
-      });
+      const containerBotoes = document.createElement('div');
+      containerBotoes.className = 'container-botoes';
+      [5, 10, 20, 50].forEach(pontos =>
+        containerBotoes.appendChild(criarBotaoPontos(pontos))
+      );
+      cartao.append(containerBotoes);
 
-      card.appendChild(placarElement);
-      card.appendChild(containerBotoes);
-
-      return card;
+      return cartao;
     };
 
-    const inicializar = () => {
-      const containerPrincipal = document.getElementById("container-principal");
-      const dupla1 = criarCardDupla("dupla-1", "dupla-1");
-      const dupla2 = criarCardDupla("dupla-2", "dupla-2");
-
-      containerPrincipal.appendChild(dupla1);
-      containerPrincipal.appendChild(dupla2);
-
-      criarGerenciadorDupla(".dupla-1", "dupla-1");
-      criarGerenciadorDupla(".dupla-2", "dupla-2");
+    const init = () => {
+      const container = document.getElementById('container-principal');
+      const dupla1 = criarCartaoDupla('dupla-1', 'dupla-1');
+      const dupla2 = criarCartaoDupla('dupla-2', 'dupla-2');
+      container.append(dupla1, dupla2);
+      gerenciarDupla('.dupla-1', 'dupla-1');
+      gerenciarDupla('.dupla-2', 'dupla-2');
     };
-
-    inicializar();
   </script>
 </body>
 </html>
